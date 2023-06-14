@@ -1,4 +1,4 @@
-import {Actor, Vector,Input} from "excalibur";
+import {Actor, Vector, Input, clamp} from "excalibur";
 import {Resources} from "./resources.js";
 export class player extends Actor
 {
@@ -8,16 +8,17 @@ export class player extends Actor
     angle
 
     isDiving
+    isRising
 
     divingTimer
 
 
-    static diveMinScale=new Vector(0.5,0.5);
-    static diveTime = 1.5;
-
     constructor() {
         super();
         this.angle=0;
+        this.divingTimer=0;
+        this.isDiving=false;
+        this.isRising=false;
     }
     onInitialize(_engine) {
         super.onInitialize(_engine);
@@ -33,7 +34,7 @@ export class player extends Actor
         this.Move();
         if(this.isDiving)
         {
-            this.Dive()
+            this.Dive(_delta/1000)
         }
     }
 
@@ -47,20 +48,49 @@ export class player extends Actor
         {
             this.angle+=delta*5;
         }
+        if(this.game.input.keyboard.isHeld(Input.Keys.Space) && this.isDiving==false)
+        {
+            this.isDiving=true;
+        }
     }
     Move()
     {
         this.transform.rotation=this.angle;
-        let forward = new Vector(Math.cos(this.angle)*500,Math.sin(this.angle)*500)
+        let forward = new Vector(Math.cos(this.angle)*300,Math.sin(this.angle)*300)
         this.vel = forward;
     }
 
     Dive(delta)
     {
-        this.divingTimer-=delta;
-        if(this.divingTimer < 0)
-        {
-
+        if(!this.isRising) {
+          //  console.log("scaleDown")
+            this.divingTimer += delta;
         }
+        else
+        {
+          //  console.log("scaleUp")
+            this.divingTimer -= delta;
+        }
+        let scale = new Vector(0,0);
+        let clampedTime = Math.min(Math.max(0,this.divingTimer),1)
+       // console.log(clampedTime);
+        scale.x = this.lerp(1,0.5,clampedTime)
+        scale.y = scale.x;
+        console.log(scale.x);
+        this.scale=scale;
+        if(this.divingTimer>1)
+        {
+            this.isRising=true;
+        }
+        if(this.divingTimer<0)
+        {
+            this.isRising=false;
+            this.isDiving=false;
+        }
+    }
+    lerp(a,b,t)
+    {
+        let v = a+t*(b-a);
+        return v;
     }
 }
