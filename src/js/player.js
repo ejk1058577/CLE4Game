@@ -24,9 +24,9 @@ export class player extends Actor
         super.onInitialize(_engine);
         //save refernce to game engine
         this.game=_engine;
+        this.z =1;
         //assign sprite to actor. The sprite is flipped because it faced wrong direction, might not need in final version
-        let sprite = Resources.Fish.toSprite();
-        sprite.flipHorizontal=true;
+        let sprite = Resources.Meeuw.toSprite();
         this.graphics.use(sprite);
 
         const box = Shape.Box(100, 100);
@@ -84,7 +84,7 @@ export class player extends Actor
     Dive(delta)
     {
         this.divingTimer +=delta;
-        console.log(this.divingTimer);
+      //  console.log(this.divingTimer);
 
         let scale = new Vector(0,0);
         //takes the absolute value of diving timer and clamps it between 0 and 1
