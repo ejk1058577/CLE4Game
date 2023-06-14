@@ -1,4 +1,4 @@
-import {Actor, Vector, Input, clamp, Shape} from "excalibur";
+import {Actor, Vector, Input, clamp, CollisionType, Shape} from "excalibur";
 import {Resources} from "./resources.js";
 export class player extends Actor
 {
@@ -17,16 +17,28 @@ export class player extends Actor
         this.angle=0;
         this.divingTimer=-1;
         this.isDiving=false;
+        this.inventory=null;
+        
     }
     onInitialize(_engine) {
         super.onInitialize(_engine);
         //save refernce to game engine
         this.game=_engine;
         //assign sprite to actor. The sprite is flipped because it faced wrong direction, might not need in final version
-        let sprite = Resources.Meeuw.toSprite();
-       // sprite.flipHorizontal=true;
-        this.collider.set(Shape.Circle(32));
+        let sprite = Resources.Fish.toSprite();
+        sprite.flipHorizontal=true;
         this.graphics.use(sprite);
+
+        const box = Shape.Box(100, 100);
+        this.collider.set(box);
+        this.body.collisionType = CollisionType.Passive;
+
+        this.on('precollision', (e) => {
+            if (this.isDiving && Math.abs(this.divingTimer) < 0.2) {
+                this.FoodCollision(e.other);
+                console.log(`${e.other.id}`);
+            }
+        });
     }
     onPreUpdate(_engine, _delta) {
         super.onPreUpdate(_engine, _delta);
@@ -95,5 +107,9 @@ export class player extends Actor
     {
         let v = a+t*(b-a);
         return v;
+    }
+
+    FoodCollision(actor) {
+        actor.pickup(this);
     }
 }
