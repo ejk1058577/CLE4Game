@@ -27,6 +27,8 @@ export class player extends Actor
         this.z =1;
         //assign sprite to actor. The sprite is flipped because it faced wrong direction, might not need in final version
         let sprite = Resources.Meeuw.toSprite();
+       // sprite.flipHorizontal=true;
+        this.collider.set(Shape.Circle(32));
         this.graphics.use(sprite);
 
         const box = Shape.Box(100, 100);
