@@ -1,4 +1,4 @@
-import {Actor, Vector, Input, clamp} from "excalibur";
+import {Actor, Vector, Input, clamp, Shape} from "excalibur";
 import {Resources} from "./resources.js";
 export class player extends Actor
 {
@@ -23,8 +23,9 @@ export class player extends Actor
         //save refernce to game engine
         this.game=_engine;
         //assign sprite to actor. The sprite is flipped because it faced wrong direction, might not need in final version
-        let sprite = Resources.Fish.toSprite();
-        sprite.flipHorizontal=true;
+        let sprite = Resources.Meeuw.toSprite();
+       // sprite.flipHorizontal=true;
+        this.collider.set(Shape.Circle(32));
         this.graphics.use(sprite);
     }
     onPreUpdate(_engine, _delta) {
