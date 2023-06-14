@@ -2,6 +2,8 @@
 
 ![fishes](./src/images/preview.png)
 
+TODO: Schrijf een nieuwe README
+
 - Klik op USE THIS TEMPLATE. Kies als owner jouw eigen github account. 
 - Geef het project een coole naam en check dat dit startproject nu in je eigen github staat.
 - CLONE de repository van jouw eigen github naar je lokale computer via de git url. Die vind je onder "code".
