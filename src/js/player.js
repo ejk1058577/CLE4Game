@@ -11,7 +11,7 @@ export class player extends fallingObject
     angle
     isDiving
     divingTimer
-
+    spacePrevState;
 
     constructor() {
         super(new Vector(0.5,0.5),new Vector(1,1),1);
@@ -20,6 +20,7 @@ export class player extends fallingObject
         this.divingTimer=-1;
         this.isDiving=false;
         this.inventory=0;
+        this.spacePrevState=false;
         
     }
     onInitialize(_engine) {
@@ -66,25 +67,34 @@ export class player extends fallingObject
         }
 
         //drop item if player not diving, is holding food when space is pressed
-        if (this.game.input.keyboard.isHeld(Input.Keys.Space) && this.isDiving==false && this.inventory != 0) {
-            let foodActor = new Food({id:this.inventory});
-            this.inventory = 0;
 
-            foodActor.pos = new Vector(this.pos._x, this.pos._y);
-            this.scene.add(foodActor);
-            
-            console.log(this.pos);
-            console.log(foodActor.pos);
+        if (this.game.input.keyboard.isHeld(Input.Keys.Space)) {
+            if(!this.isDiving && !this.spacePrevState)
+            {
+                if (this.inventory > 0) {
+                    let foodActor = new Food({id: this.inventory});
+                    this.inventory = 0;
 
-            foodActor.isFalling = true;
+                    foodActor.pos = this.pos;
+                    foodActor.height=1;
+                    this.scene.add(foodActor);
+
+                    console.log(this.pos);
+                    console.log(foodActor.pos);
+
+                    foodActor.isFalling = true;
+                } else {
+                    this.isDiving = true;
+                }
+            }
+            this.spacePrevState=true
 
         }
-
-        //start player dive if space is pressed and the player was not diving
-        else if(this.game.input.keyboard.isHeld(Input.Keys.Space) && this.isDiving==false && this.inventory == 0)
+        else
         {
-            this.isDiving=true;
+            this.spacePrevState=false;
         }
+        //start player dive if space is pressed and the player was not diving
     }
     Move()
     {

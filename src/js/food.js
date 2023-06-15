@@ -8,9 +8,9 @@ export class Food extends fallingObject {
     fallingTimer;
 
     constructor(data) {
-        super(new Vector(0.12, 0.12), new Vector(0.25, 0.25), 1);
+        super(new Vector(0.25, 0.25), new Vector(0.5, 0.5), 1);
         this.foodId = data.id;
-
+        this.height=0;
     }
 
     onInitialize(_engine) {
@@ -22,11 +22,11 @@ export class Food extends fallingObject {
         this.body.collisionType = CollisionType.Passive;
 
         let sprite = Resources.Fish.toSprite();
-        sprite.flipHorizontal=true;
         this.graphics.use(sprite);
-        this.scale=this.maxScale;
+        this.scale=this.minScale;
 
-        this.fallingTimer = -1;
+
+        this.fallingTimer = 1;
 
       //  console.log(`trying width is ${this.width}`)
     }
@@ -45,16 +45,20 @@ export class Food extends fallingObject {
     }
     _prekill(_scene) {
         super._prekill(_scene);
-        this.spawner.currentAmount--;
+        if (this.spawner != null) {
+            this.spawner.currentAmount--;
+        }
     }
 
     fall(delta) {
-        this.fallingTimer += delta;
-        this.height = clamp(Math.abs(this.divingTimer),0,1);
-        if(this.fallingTimer>0)
+        this.fallingTimer -= delta;
+        this.height = clamp(Math.abs(this.fallingTimer),0,1);
+        //console.log(this.fallingTimer);
+        if(this.fallingTimer<0)
         {
-            this.fallingTimer=-1;
+           // this.fallingTimer=1;
             this.isFalling=false;
+            this.kill();
         }
     }
 }
