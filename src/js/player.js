@@ -1,6 +1,7 @@
 import {Actor, Vector, Input, clamp, CollisionType, Shape} from "excalibur";
 import {Resources} from "./resources.js";
 import {fallingObject} from "./fallingObject.js";
+import { Food } from "./food.js";
 export class player extends fallingObject
 {
     //Refernce to engine
@@ -64,8 +65,23 @@ export class player extends fallingObject
             this.angle+=delta*5;
         }
 
+        //drop item if player not diving, is holding food when space is pressed
+        if (this.game.input.keyboard.isHeld(Input.Keys.Space) && this.isDiving==false && this.inventory != 0) {
+            let foodActor = new Food({id:this.inventory});
+            this.inventory = 0;
+
+            foodActor.pos = new Vector(this.pos._x, this.pos._y);
+            this.scene.add(foodActor);
+            
+            console.log(this.pos);
+            console.log(foodActor.pos);
+
+            foodActor.isFalling = true;
+
+        }
+
         //start player dive if space is pressed and the player was not diving
-        if(this.game.input.keyboard.isHeld(Input.Keys.Space) && this.isDiving==false)
+        else if(this.game.input.keyboard.isHeld(Input.Keys.Space) && this.isDiving==false && this.inventory == 0)
         {
             this.isDiving=true;
         }
@@ -84,7 +100,6 @@ export class player extends fallingObject
         this.divingTimer +=delta;
       //  console.log(this.divingTimer);
 
-        let scale = new Vector(0,0);
         //takes the absolute value of diving timer and clamps it between 0 and 1 to calculate height;
         this.height = clamp(Math.abs(this.divingTimer),0,1);
         //end dive
