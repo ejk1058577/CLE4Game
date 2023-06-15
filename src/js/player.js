@@ -23,11 +23,11 @@ export class player extends fallingObject
     }
     onInitialize(_engine) {
         super.onInitialize(_engine);
+        this.z = 5;
         //save refernce to game engine
         this.game=_engine;
         //assign sprite to actor. The sprite is flipped because it faced wrong direction, might not need in final version
-        let sprite = Resources.Fish.toSprite();
-        sprite.flipHorizontal=true;
+        let sprite = Resources.Meeuw.toSprite();
         this.graphics.use(sprite);
 
         const box = Shape.Box(100, 100);
@@ -81,9 +81,6 @@ export class player extends fallingObject
     Dive(delta)
     {
         this.divingTimer +=delta;
-        console.log(this.divingTimer);
-
-        let scale = new Vector(0,0);
         //takes the absolute value of diving timer and clamps it between 0 and 1 to calculate height;
         this.height = clamp(Math.abs(this.divingTimer),0,1);
         //end dive

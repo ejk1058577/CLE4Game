@@ -5,6 +5,7 @@ import {player} from "./player.js";
 import {Food} from "./food.js"
 
 import {Spawner} from "./spawner.js";
+import {HumanMenager} from "./humanMenager.js";
 
 export class Game extends Engine {
 
@@ -20,6 +21,8 @@ export class Game extends Engine {
         this.add(pl);
         let sp = new Spawner(20,Food,{id:1})
         this.add(sp);
+        let humansSpawner = new HumanMenager(10);
+        this.add(humansSpawner);
     }
 }
 
