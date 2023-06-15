@@ -1,6 +1,7 @@
 import {Actor, Vector, Input, clamp, CollisionType, Shape} from "excalibur";
 import {Resources} from "./resources.js";
-export class player extends Actor
+import {fallingObject} from "./fallingObject.js";
+export class player extends fallingObject
 {
     //Refernce to engine
     game
@@ -12,12 +13,12 @@ export class player extends Actor
 
 
     constructor() {
-        super();
+        super(new Vector(0.5,0.5),new Vector(1,1),1);
         //se up initiaal values for variables
         this.angle=0;
         this.divingTimer=-1;
         this.isDiving=false;
-        this.inventory=null;
+        this.inventory=0;
         
     }
     onInitialize(_engine) {
@@ -33,12 +34,8 @@ export class player extends Actor
         this.collider.set(box);
         this.body.collisionType = CollisionType.Passive;
 
-        this.on('precollision', (e) => {
-            if (this.isDiving && Math.abs(this.divingTimer) < 0.2) {
-                this.FoodCollision(e.other);
-                console.log(`${e.other.id}`);
-            }
-        });
+        this.on('precollision', (e) => this.FoodCollision(e)
+        );
     }
     onPreUpdate(_engine, _delta) {
         super.onPreUpdate(_engine, _delta);
@@ -87,12 +84,8 @@ export class player extends Actor
         console.log(this.divingTimer);
 
         let scale = new Vector(0,0);
-        //takes the absolute value of diving timer and clamps it between 0 and 1
-        let clampedTime = Math.min(Math.max(0,Math.abs(this.divingTimer)),1)
-        //lerp player scale between min and max size depending on clamped diving timer value
-        scale.x = this.lerp(0.5,1,clampedTime)
-        scale.y = scale.x;
-        this.scale=scale;
+        //takes the absolute value of diving timer and clamps it between 0 and 1 to calculate height;
+        this.height = clamp(Math.abs(this.divingTimer),0,1);
         //end dive
         if(this.divingTimer>1)
         {
@@ -101,15 +94,12 @@ export class player extends Actor
         }
     }
 
-
-    //lerp between two numbers
-    lerp(a,b,t)
+    FoodCollision(e)
     {
-        let v = a+t*(b-a);
-        return v;
-    }
-
-    FoodCollision(actor) {
-        actor.pickup(this);
+       // console.log("trytopick")
+        if (this.isDiving && Math.abs(this.divingTimer) < 0.2 && this.inventory==0) {
+            e.other.pickup(this);
+            console.log(`${e.other.id}`);
+        }
     }
 }
