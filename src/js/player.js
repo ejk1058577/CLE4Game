@@ -1,6 +1,9 @@
 import {Actor, Vector, Input, clamp, CollisionType, Shape} from "excalibur";
 import {Resources} from "./resources.js";
-export class player extends Actor
+import {fallingObject} from "./fallingObject.js";
+import { Food } from "./food.js";
+
+export class player extends fallingObject
 {
     //Refernce to engine
     game
@@ -9,22 +12,23 @@ export class player extends Actor
     angle
     isDiving
     divingTimer
-
+    spacePrevState;
 
     constructor() {
-        super();
+        super(new Vector(0.75,0.75),new Vector(1,1),1);
         //se up initiaal values for variables
         this.angle=0;
         this.divingTimer=-1;
         this.isDiving=false;
-        this.inventory=null;
+        this.inventory=0;
+        this.spacePrevState=false;
         
     }
     onInitialize(_engine) {
         super.onInitialize(_engine);
+        this.z = 5;
         //save refernce to game engine
         this.game=_engine;
-        this.z =1;
         //assign sprite to actor. The sprite is flipped because it faced wrong direction, might not need in final version
         let sprite = Resources.Meeuw.toSprite();
         this.graphics.use(sprite);
@@ -33,12 +37,8 @@ export class player extends Actor
         this.collider.set(box);
         this.body.collisionType = CollisionType.Passive;
 
-        this.on('precollision', (e) => {
-            if (this.isDiving && Math.abs(this.divingTimer) < 0.2) {
-                this.FoodCollision(e.other);
-                console.log(`${e.other.id}`);
-            }
-        });
+        this.on('precollision', (e) => this.FoodCollision(e)
+        );
     }
     onPreUpdate(_engine, _delta) {
         super.onPreUpdate(_engine, _delta);
@@ -66,11 +66,35 @@ export class player extends Actor
             this.angle+=delta*5;
         }
 
-        //start player dive if space is pressed and the player was not diving
-        if(this.game.input.keyboard.isHeld(Input.Keys.Space) && this.isDiving==false)
-        {
-            this.isDiving=true;
+        //drop item if player not diving, is holding food when space is pressed
+
+        if (this.game.input.keyboard.isHeld(Input.Keys.Space)) {
+            if(!this.isDiving && !this.spacePrevState)
+            {
+                if (this.inventory > 0) {
+                    let foodActor = new Food({id: this.inventory});
+                    this.inventory = 0;
+
+                    foodActor.pos = this.pos;
+                    foodActor.height=1;
+                    this.scene.add(foodActor);
+
+                    console.log(this.pos);
+                    console.log(foodActor.pos);
+
+                    foodActor.isFalling = true;
+                } else {
+                    this.isDiving = true;
+                }
+            }
+            this.spacePrevState=true
+
         }
+        else
+        {
+            this.spacePrevState=false;
+        }
+        //start player dive if space is pressed and the player was not diving
     }
     Move()
     {
@@ -84,15 +108,11 @@ export class player extends Actor
     Dive(delta)
     {
         this.divingTimer +=delta;
-      //  console.log(this.divingTimer);
 
-        let scale = new Vector(0,0);
-        //takes the absolute value of diving timer and clamps it between 0 and 1
-        let clampedTime = Math.min(Math.max(0,Math.abs(this.divingTimer)),1)
-        //lerp player scale between min and max size depending on clamped diving timer value
-        scale.x = this.lerp(0.5,1,clampedTime)
-        scale.y = scale.x;
-        this.scale=scale;
+
+      //  console.log(this.divingTimer);
+        //takes the absolute value of diving timer and clamps it between 0 and 1 to calculate height;
+        this.height = clamp(Math.abs(this.divingTimer),0,1);
         //end dive
         if(this.divingTimer>1)
         {
@@ -101,15 +121,15 @@ export class player extends Actor
         }
     }
 
-
-    //lerp between two numbers
-    lerp(a,b,t)
+    FoodCollision(e)
     {
-        let v = a+t*(b-a);
-        return v;
-    }
-
-    FoodCollision(actor) {
-        actor.pickup(this);
+       // console.log("trytopick")
+        if (this.isDiving && Math.abs(this.divingTimer) < 0.2 && this.inventory==0) {
+            console.log(e.other instanceof Food);
+            if(e.other instanceof Food)
+            {
+                e.other.pickup(this);
+            }
+        }
     }
 }

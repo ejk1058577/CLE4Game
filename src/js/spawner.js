@@ -7,7 +7,7 @@ export class Spawner extends Actor
     currentAmount;
     spawnObject;
     spawnParam;
-
+    afterBehaviour
     rng
     constructor(targetAmount,SpawnObject,SpawnParam) {
         super();
@@ -27,13 +27,20 @@ export class Spawner extends Actor
         super.onPreUpdate(_engine, _delta);
         if(this.currentAmount<this.targetAmount)
         {
-            let spawn = new this.spawnObject(this.spawnParam);
-            let xpos = this.rng.integer(0,800);
-            let ypos = this.rng.integer(0,600);
-            spawn.pos = new Vector(xpos,ypos);
-            spawn.spawner = this;
-            this.scene.add(spawn);
-            this.currentAmount++;
+            this.spawn()
+        }
+    }
+    spawn()
+    {
+        let spawn = new this.spawnObject(this.spawnParam);
+        let xpos = this.rng.integer(0,800);
+        let ypos = this.rng.integer(0,600);
+        spawn.pos = new Vector(xpos,ypos);
+        spawn.spawner = this;
+        this.scene.add(spawn);
+        this.currentAmount++;
+        if(this.afterBehaviour != null) {
+            this.afterBehaviour(spawn)
         }
     }
 }
