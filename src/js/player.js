@@ -1,7 +1,8 @@
 import {Actor, Vector, Input, clamp, CollisionType, Shape} from "excalibur";
 import {Resources} from "./resources.js";
 import {fallingObject} from "./fallingObject.js";
-import {Food} from "./food.js";
+import { Food } from "./food.js";
+
 export class player extends fallingObject
 {
     //Refernce to engine
@@ -11,7 +12,7 @@ export class player extends fallingObject
     angle
     isDiving
     divingTimer
-
+    spacePrevState;
 
     constructor() {
         super(new Vector(0.75,0.75),new Vector(1,1),1);
@@ -20,6 +21,7 @@ export class player extends fallingObject
         this.divingTimer=-1;
         this.isDiving=false;
         this.inventory=0;
+        this.spacePrevState=false;
         
     }
     onInitialize(_engine) {
@@ -64,11 +66,35 @@ export class player extends fallingObject
             this.angle+=delta*5;
         }
 
-        //start player dive if space is pressed and the player was not diving
-        if(this.game.input.keyboard.isHeld(Input.Keys.Space) && this.isDiving==false)
-        {
-            this.isDiving=true;
+        //drop item if player not diving, is holding food when space is pressed
+
+        if (this.game.input.keyboard.isHeld(Input.Keys.Space)) {
+            if(!this.isDiving && !this.spacePrevState)
+            {
+                if (this.inventory > 0) {
+                    let foodActor = new Food({id: this.inventory});
+                    this.inventory = 0;
+
+                    foodActor.pos = this.pos;
+                    foodActor.height=1;
+                    this.scene.add(foodActor);
+
+                    console.log(this.pos);
+                    console.log(foodActor.pos);
+
+                    foodActor.isFalling = true;
+                } else {
+                    this.isDiving = true;
+                }
+            }
+            this.spacePrevState=true
+
         }
+        else
+        {
+            this.spacePrevState=false;
+        }
+        //start player dive if space is pressed and the player was not diving
     }
     Move()
     {
@@ -82,6 +108,9 @@ export class player extends fallingObject
     Dive(delta)
     {
         this.divingTimer +=delta;
+
+
+      //  console.log(this.divingTimer);
         //takes the absolute value of diving timer and clamps it between 0 and 1 to calculate height;
         this.height = clamp(Math.abs(this.divingTimer),0,1);
         //end dive

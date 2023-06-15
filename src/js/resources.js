@@ -6,7 +6,7 @@ import humanImage from  '../images/human.png'
 const Resources = {
     Fish: new ImageSource(fishImage),
     Meeuw:new ImageSource(meeuwImage),
-    Human:new ImageSource(humanImage),
+    Human:new ImageSource(humanImage)
 }
 const ResourceLoader = new Loader([Resources.Fish,Resources.Meeuw,Resources.Human])
 
