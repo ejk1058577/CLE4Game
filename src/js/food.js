@@ -27,6 +27,8 @@ export class Food extends Actor {
     }
     onPreKill(_scene) {
         super.onPreKill(_scene);
+        if(this.spawner != null){
         this.spawner.currentAmount--;
+        }
     }
 }

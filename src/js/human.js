@@ -1,5 +1,6 @@
 import {Actor, CollisionType, Ray, Shape, Vector} from "excalibur";
 import {Resources} from "./resources.js";
+import {Food} from "./food.js";
 
 export class Human extends Actor
 {
@@ -52,11 +53,13 @@ export class Human extends Actor
         this.spawner.currentAmount--;
     }
 
-    dropItem(fallingObject)
+    dropItem()
     {
         if(this.inventory>0)
         {
-
+            let droppedFood = new Food({id:this.inventory})
+            droppedFood.pos=this.pos;
+            this.inventory=0;
         }
     }
     lerp(a,b,t)
