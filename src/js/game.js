@@ -25,11 +25,11 @@ export class Game extends Engine {
         });
         pl.pos=new Vector(400,300);
         this.add(pl);
-        let sp = new Spawner(20,Food,{id:1})
+        let sp = new Spawner(5,Food,{id:1})
         this.add(sp);
-        let humansSpawner = new Spawner(5,Human,);
+        let humansSpawner = new Spawner(2,Human,);
         this.add(humansSpawner);
-      //  this.showDebug(true);
+      //a  this.showDebug(true);
     }
 }
 

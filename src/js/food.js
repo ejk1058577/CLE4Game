@@ -1,6 +1,7 @@
 import {Actor, Vector, Input, clamp, CollisionType, Shape} from "excalibur";
 import {Resources} from "./resources.js";
 import {fallingObject} from "./fallingObject.js";
+import {Human} from "./human.js";
 export class Food extends fallingObject {
     foodId;
     spawner;
@@ -16,8 +17,8 @@ export class Food extends fallingObject {
     onInitialize(_engine) {
         super.onInitialize(_engine);
         this.z =0;
-        const box = Shape.Box(100, 100);
-        this.collider.set(box);
+        const circle = Shape.Circle(64)
+        this.collider.set(circle);
         this.body.collisionType = CollisionType.Passive;
         this.scale=new Vector(0.25,0.25);
         let sprite = Resources.Fish.toSprite();
@@ -50,11 +51,24 @@ export class Food extends fallingObject {
         this.fallingTimer -= delta;
         this.height = clamp(Math.abs(this.fallingTimer),0,1);
         //console.log(this.fallingTimer);
+        if(this.fallingTimer<0.4)
+        {
+            this.on("precollision", event => this.humanDropItem(event))
+        }
         if(this.fallingTimer<0)
         {
            // this.fallingTimer=1;
             this.isFalling=false;
             this.kill();
+        }
+    }
+    humanDropItem(event)
+    {
+        if(event.other instanceof Human)
+        {
+            this.kill();
+            console.log("humanAttacked")
+            event.other.dropItem();
         }
     }
 }

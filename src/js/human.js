@@ -17,6 +17,7 @@ export class Human extends Actor
     onInitialize(_engine) {
         console.log("Im a Human")
         super.onInitialize(_engine);
+        this.inventory = 1;
         this.game=_engine;
         this.graphics.use(Resources.Human.toSprite());
         this.collider.set(Shape.Circle(64))
@@ -43,7 +44,7 @@ export class Human extends Actor
             this.lastPos=new Vector(0,0);
         }
         this.transform.rotation = this.angle;
-        let forward = new Vector(Math.cos(this.angle) * 150, Math.sin(this.angle) * 150)
+        let forward = new Vector(Math.cos(this.angle) * 50, Math.sin(this.angle) * 50)
         this.vel = forward;
         this.lastPos.x = this.pos.x;
         this.lastPos.y = this.pos.y;
@@ -59,6 +60,7 @@ export class Human extends Actor
         {
             let droppedFood = new Food({id:this.inventory})
             droppedFood.pos=this.pos;
+            this.scene.add(droppedFood);
             this.inventory=0;
         }
     }
