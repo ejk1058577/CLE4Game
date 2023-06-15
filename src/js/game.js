@@ -5,6 +5,7 @@ import {player} from "./player.js";
 import {Food} from "./food.js"
 
 import {Spawner} from "./spawner.js";
+import {Nest} from "./nest.js";
 
 export class Game extends Engine {
 
@@ -22,6 +23,8 @@ export class Game extends Engine {
         this.add(pl);
         let sp = new Spawner(20,Food,{id:1})
         this.add(sp);
+        let nest = new Nest();
+        this.add(nest);
     }
 }
 
