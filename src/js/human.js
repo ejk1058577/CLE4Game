@@ -1,4 +1,4 @@
-import {Actor, Ray, Shape, Vector} from "excalibur";
+import {Actor, CollisionType, Ray, Shape, Vector} from "excalibur";
 import {Resources} from "./resources.js";
 
 export class Human extends Actor
@@ -6,43 +6,62 @@ export class Human extends Actor
     spawner
     game
     angle
-
+    lastPos
     inventory
 
     constructor() {
         super();
+
     }
     onInitialize(_engine) {
         console.log("Im a Human")
         super.onInitialize(_engine);
+        this.game=_engine;
         this.graphics.use(Resources.Human.toSprite());
         this.collider.set(Shape.Circle(64))
-        this.angle=Math.random()*Math.PI*2;
+        this.body.collisionType = CollisionType.Active;
+        this.angle=(2*Math.random()-1)*Math.PI*2;
+        this.transform.rotation = this.angle;
         this.z = 1;
+        this.on("exitviewport", event => this.kill());
     }
     onPreUpdate(_engine, _delta) {
         super.onPreUpdate(_engine, _delta);
-        this.move();
+        this.move(_delta/1000);
     }
-    avoidObst()
-    {
-
-    }
-    move() {
+    move(delta) {
         //rotate player
+        if(this.lastPos != null) {
+            let posDir = new Vector(this.pos.x - this.lastPos.x, this.pos.y - this.lastPos.y).normalize();
+            //console.log(posDir);
+            let dot = posDir.toAngle();
+            this.angle = this.lerp(this.angle,dot,delta*5)
+        }
+        else
+        {
+            this.lastPos=new Vector(0,0);
+        }
         this.transform.rotation = this.angle;
-        //recalculate forward velocity of the player
         let forward = new Vector(Math.cos(this.angle) * 150, Math.sin(this.angle) * 150)
         this.vel = forward;
+        this.lastPos.x = this.pos.x;
+        this.lastPos.y = this.pos.y;
     }
-    dropItem()
-    {
+    _prekill(_scene) {
+        super._prekill(_scene);
+        this.spawner.currentAmount--;
+    }
 
-    }
-    distSquared(a,b)
+    dropItem(fallingObject)
     {
-        let dx = a.x-b.x;
-        let dy = a.y-b.y;
-        return dx*dx+dy*dy;
+        if(this.inventory>0)
+        {
+
+        }
+    }
+    lerp(a,b,t)
+    {
+        let v = a+t*(b-a);
+        return v;
     }
 }

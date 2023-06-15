@@ -1,6 +1,7 @@
 import {Actor, Vector, Input, clamp, CollisionType, Shape} from "excalibur";
 import {Resources} from "./resources.js";
 import {fallingObject} from "./fallingObject.js";
+import {Food} from "./food.js";
 export class player extends fallingObject
 {
     //Refernce to engine
@@ -13,7 +14,7 @@ export class player extends fallingObject
 
 
     constructor() {
-        super(new Vector(0.5,0.5),new Vector(1,1),1);
+        super(new Vector(0.75,0.75),new Vector(1,1),1);
         //se up initiaal values for variables
         this.angle=0;
         this.divingTimer=-1;
@@ -95,8 +96,11 @@ export class player extends fallingObject
     {
        // console.log("trytopick")
         if (this.isDiving && Math.abs(this.divingTimer) < 0.2 && this.inventory==0) {
-            e.other.pickup(this);
-            console.log(`${e.other.id}`);
+            console.log(e.other instanceof Food);
+            if(e.other instanceof Food)
+            {
+                e.other.pickup(this);
+            }
         }
     }
 }
