@@ -1,6 +1,8 @@
 import {ScreenElement,Vector,Text,Font,FontUnit,Color,GraphicsGroup} from "excalibur";
+import {Arrow} from "./Arrow.js";
 export class UI extends ScreenElement {
 
+    game
     scoreText
 
     constructor() {
@@ -8,7 +10,6 @@ export class UI extends ScreenElement {
     }
 
     onInitialize(engine) {
-
         this.scoreText = new Text({
             text: '0',
             font: new Font({
@@ -24,7 +25,7 @@ export class UI extends ScreenElement {
                 {
                     graphic: this.scoreText,
                     pos: new Vector(400, 100),
-                }
+                },
             ],
         })
         this.graphics.use(group)
