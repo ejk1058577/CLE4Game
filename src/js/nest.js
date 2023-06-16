@@ -7,7 +7,7 @@ export class Nest extends Actor
     requestedItems;
     constructor() {
         super();
-        this.pos=new Vector(400,300)
+        this.pos=new Vector(32*128,32*128)
     }
     onInitialize(_engine) {
         super.onInitialize(_engine);
@@ -20,9 +20,10 @@ export class Nest extends Actor
     {
         if(event.other instanceof player)
         {
-            if(event.other.inventory>0)
+            if(event.other.inventory>1)
             {
                 event.other.inventory=0;
+                event.other.displayItemHeld();
                 console.log("delivered food")
             }
         }

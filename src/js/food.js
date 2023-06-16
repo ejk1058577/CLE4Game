@@ -21,8 +21,17 @@ export class Food extends fallingObject {
         this.collider.set(circle);
         this.body.collisionType = CollisionType.Passive;
         this.scale=new Vector(0.25,0.25);
-        let sprite = Resources.Fish.toSprite();
-        this.graphics.use(sprite);
+        if(this.foodId==1)
+        {
+            let sprite = Resources.Stick.toSprite();
+            this.graphics.use(sprite);
+        }
+        else
+        {
+            let sprite = Resources.Fish.toSprite();
+            this.graphics.use(sprite);
+        }
+
         this.z = 0;
         this.scale=this.minScale;
         this.fallingTimer = 1;

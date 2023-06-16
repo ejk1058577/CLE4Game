@@ -8,9 +8,12 @@ import {Spawner} from "./spawner.js";
 import {HumanMenager} from "./humanMenager.js";
 import {Human} from "./human.js";
 import {Nest} from "./nest.js";
+import {Ground} from "./Ground.js";
 
 export class Game extends Engine {
 
+    playerPos;
+    pl
     constructor() {
         super({ width: 800, height: 600 })
         this.start(ResourceLoader).then(() => this.startGame())
@@ -20,19 +23,23 @@ export class Game extends Engine {
         console.log("start")
         const box = Shape.Box(100, 10)
 
-        let pl = new player({
-            width:100,
-            height: 100,
-        });
-        pl.pos=new Vector(400,300);
-        this.add(pl);
-        let sp = new Spawner(5,Food,{id:1})
-        this.add(sp);
-        let humansSpawner = new Spawner(2,Human,);
+       this.pl = new player();
+        this.pl.pos=new Vector(32*128,32*128)
+        this.add(this.pl);
+        this.playerPos=this.pl.pos;
+        this.currentScene.camera.strategy.lockToActor(this.pl);
+       // let sp = new Spawner(5,Food,{id:1})
+        //this.add(sp);
+        let humansSpawner = new Spawner(30,Human,{},new Vector(128*64,128*64),new Vector(0,0));
         this.add(humansSpawner);
-      //a  this.showDebug(true);
+      //  this.showDebug(true);
         let nest = new Nest();
         this.add(nest);
+        this.add(new Ground())
+    }
+    onPostUpdate(_engine, _delta) {
+        super.onPostUpdate(_engine, _delta);
+        this.playerPos = this.pl.pos;
     }
 }
 

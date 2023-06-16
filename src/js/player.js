@@ -9,6 +9,8 @@ export class player extends fallingObject
     game
     //ID number of the food object that is currently picked
     inventory
+
+    displayItem
     angle
     isDiving
     divingTimer
@@ -27,6 +29,14 @@ export class player extends fallingObject
     onInitialize(_engine) {
         super.onInitialize(_engine);
         this.z = 5;
+        this.displayItem = new Actor();
+        this.displayItem.pos = this.pos;
+        this.displayItem.scale=new Vector(0.5,0.5);
+        this.displayItem.z = 4;
+        this.scene.add(this.displayItem);
+
+       // this.displayItem.graphics.use(Resources.Human.toSprite())
+        this.displayItemHeld();
         //save refernce to game engine
         this.game=_engine;
         //assign sprite to actor. The sprite is flipped because it faced wrong direction, might not need in final version
@@ -74,7 +84,7 @@ export class player extends fallingObject
                 if (this.inventory > 0) {
                     let foodActor = new Food({id: this.inventory});
                     this.inventory = 0;
-
+                    this.displayItemHeld();
                     foodActor.pos = this.pos;
                     foodActor.height=1;
                     this.scene.add(foodActor);
@@ -103,6 +113,9 @@ export class player extends fallingObject
         //recalculate forward velocity of the player
         let forward = new Vector(Math.cos(this.angle)*300,Math.sin(this.angle)*300)
         this.vel = forward;
+        this.displayItem.rotation=this.angle;
+        this.displayItem.vel=forward;
+        //this.displayItem.pos=new Vector(this.pos.x,this.pos.y);
     }
 
     Dive(delta)
@@ -129,7 +142,20 @@ export class player extends fallingObject
             if(e.other instanceof Food)
             {
                 e.other.pickup(this);
+                this.displayItemHeld();
             }
+        }
+    }
+    displayItemHeld()
+    {
+        console.log("changedDisplay",this.displayItem);
+        switch (this.inventory)
+        {
+            case 0:this.displayItem.graphics.use(Resources.empty.toSprite());
+            break;
+            case 1:this.displayItem.graphics.use(Resources.Stick.toSprite());
+            break;
+            case 2:this.displayItem.graphics.use(Resources.Fish.toSprite())
         }
     }
 }

@@ -17,7 +17,7 @@ export class Human extends Actor
     onInitialize(_engine) {
         console.log("Im a Human")
         super.onInitialize(_engine);
-        this.inventory = 1;
+        this.inventory = 2;
         this.game=_engine;
         this.graphics.use(Resources.Human.toSprite());
         this.collider.set(Shape.Circle(64))
@@ -25,11 +25,15 @@ export class Human extends Actor
         this.angle=(2*Math.random()-1)*Math.PI*2;
         this.transform.rotation = this.angle;
         this.z = 1;
-        this.on("exitviewport", event => this.kill());
+        //this.on("exitviewport", event => this.kill());
     }
     onPreUpdate(_engine, _delta) {
         super.onPreUpdate(_engine, _delta);
         this.move(_delta/1000);
+        if(Vector.distance(this.pos,this.game.playerPos)>1024)
+        {
+            this.kill();
+        }
     }
     move(delta) {
         //rotate player
