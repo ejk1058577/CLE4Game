@@ -32,7 +32,7 @@ export class Game extends Engine {
         this.pl.pos=new Vector(32*128,32*128)
         this.add(this.pl);
         this.playerPos=this.pl.pos;
-        this.currentScene.camera.strategy.lockToActor(this.pl);
+        this.currentScene.camera.strategy.radiusAroundActor(this.pl,64)
        // let sp = new Spawner(5,Food,{id:1})
         //this.add(sp);
         let humansSpawner = new Spawner(30,Human,{},new Vector(128*64,128*64),new Vector(0,0));
