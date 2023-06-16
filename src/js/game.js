@@ -1,5 +1,5 @@
 import '../css/style.css'
-import { Actor, Engine, Vector, Shape } from "excalibur"
+import { Actor, Engine, Vector, Shape, Text,Font,Color} from "excalibur"
 import { Resources, ResourceLoader } from './resources.js'
 import {player} from "./player.js";
 import {Food} from "./food.js"
@@ -9,11 +9,14 @@ import {HumanMenager} from "./humanMenager.js";
 import {Human} from "./human.js";
 import {Nest} from "./nest.js";
 import {Ground} from "./Ground.js";
+import {UI} from "./UI.js";
 
 export class Game extends Engine {
 
     playerPos;
     pl
+
+    ui
     constructor() {
         super({ width: 800, height: 600 })
         this.start(ResourceLoader).then(() => this.startGame())
@@ -21,9 +24,11 @@ export class Game extends Engine {
 
     startGame() {
         console.log("start")
-        const box = Shape.Box(100, 10)
 
-       this.pl = new player();
+        this.ui = new UI();
+        this.ui.z = 1000;
+        this.add(this.ui);
+        this.pl = new player();
         this.pl.pos=new Vector(32*128,32*128)
         this.add(this.pl);
         this.playerPos=this.pl.pos;
