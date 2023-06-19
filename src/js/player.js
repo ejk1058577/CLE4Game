@@ -18,6 +18,11 @@ export class player extends fallingObject
     divingTimer
     spacePrevState;
 
+    //arcade controls
+    joystick0left;
+    joystick0right;
+    joystick0button0;
+
     constructor() {
         super(new Vector(0.75,0.75),new Vector(1,1),1);
         //se up initiaal values for variables
@@ -50,6 +55,29 @@ export class player extends fallingObject
 
         this.on('precollision', (e) => this.FoodCollision(e)
         );
+
+        //arcade controls
+        this.joystick0left = false;
+        this.joystick0right = false;
+        this.joystick0button0 = false;
+
+        document.addEventListener("joystick0left", () => {
+            this.joystick0left = true;
+            this.joystick0right = false; //yes this is necessary because both can be pressed
+        });
+        document.addEventListener("joystick0right", () => {
+            this.joystick0left = false;
+            this.joystick0right = true;
+        });
+        document.addEventListener("joystick0neutral", () => {
+            this.joystick0left = false;
+            this.joystick0right = false;
+        });
+        document.addEventListener("joystick0button0", () => {
+            if (!this.isDiving) {
+                this.joystick0button0 = true;
+            }
+        });
     }
     onPreUpdate(_engine, _delta) {
         super.onPreUpdate(_engine, _delta);
@@ -68,20 +96,22 @@ export class player extends fallingObject
     PlayerInput(delta)
     {
         //Increase or Decrease player rotation angle depending on key pressed
-        if(this.game.input.keyboard.isHeld(Input.Keys.A))
+        if(this.game.input.keyboard.isHeld(Input.Keys.A) || this.joystick0left)
         {
-            this.angle-=delta*5;
+            this.turnLeft(delta);
         }
-        else if(this.game.input.keyboard.isHeld(Input.Keys.D))
+        else if(this.game.input.keyboard.isHeld(Input.Keys.D) || this.joystick0right)
         {
-            this.angle+=delta*5;
+            this.turnRight(delta);
         }
 
         //drop item if player not diving, is holding food when space is pressed
 
-        if (this.game.input.keyboard.isHeld(Input.Keys.Space)) {
+        if (this.game.input.keyboard.isHeld(Input.Keys.Space) || this.joystick0button0) {
             if(!this.isDiving && !this.spacePrevState)
             {
+                this.joystick0button0 = false;
+
                 if (this.inventory > 0) {
                     let foodActor = new Food({id: this.inventory});
                     this.inventory = 0;
@@ -156,5 +186,13 @@ export class player extends fallingObject
             break;
             default:this.displayItem.graphics.use(FoodManager.GetFoodData(this.inventory));
         }
+    }
+
+    turnRight(delta) {
+        this.angle+=delta*5;
+    }
+
+    turnLeft(delta) {
+        this.angle-=delta*5;
     }
 }

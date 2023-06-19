@@ -20,7 +20,7 @@ export class Human extends Actor
 
     }
     onInitialize(_engine) {
-        console.log("Im a Human")
+        //console.log("Im a Human") //after all dont put the blame on me
         super.onInitialize(_engine);
         this.inventory = 2;
         this.rng = new Random();
