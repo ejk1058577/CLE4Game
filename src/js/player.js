@@ -2,7 +2,6 @@ import {Actor, Vector, Input, clamp, CollisionType, Shape} from "excalibur";
 import {Resources} from "./resources.js";
 import {fallingObject} from "./fallingObject.js";
 import { Food } from "./food.js";
-import {FoodManager} from "./foodManager.js";
 
 export class player extends fallingObject
 {
@@ -133,17 +132,4 @@ export class player extends fallingObject
             }
         }
     }
-<<<<<<< Updated upstream
-=======
-    displayItemHeld()
-    {
-        console.log("changedDisplay",this.displayItem);
-        switch (this.inventory)
-        {
-            case 0:this.displayItem.graphics.use(Resources.empty.toSprite());
-            break;
-            default: this.displayItem.graphics.use(FoodManager.GetFoodData(this.inventory))
-        }
-    }
->>>>>>> Stashed changes
 }

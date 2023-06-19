@@ -1,4 +1,4 @@
-import {Actor, CollisionType, Random, Ray, Shape, Vector} from "excalibur";
+import {Actor, CollisionType, Ray, Shape, Vector} from "excalibur";
 import {Resources} from "./resources.js";
 import {Food} from "./food.js";
 
@@ -15,14 +15,9 @@ export class Human extends Actor
 
     }
     onInitialize(_engine) {
-      //  console.log("Im a Human")
+        console.log("Im a Human")
         super.onInitialize(_engine);
-<<<<<<< Updated upstream
         this.inventory = 1;
-=======
-        this.inventory = Math.round(Math.random()*2)+2;
-       // console.log(this.inventory)
->>>>>>> Stashed changes
         this.game=_engine;
         this.graphics.use(Resources.Human.toSprite());
         this.collider.set(Shape.Circle(64))

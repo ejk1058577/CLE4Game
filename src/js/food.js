@@ -2,7 +2,6 @@ import {Actor, Vector, Input, clamp, CollisionType, Shape} from "excalibur";
 import {Resources} from "./resources.js";
 import {fallingObject} from "./fallingObject.js";
 import {Human} from "./human.js";
-import {FoodManager} from "./foodManager.js";
 export class Food extends fallingObject {
     foodId;
     spawner;
@@ -10,7 +9,7 @@ export class Food extends fallingObject {
     fallingTimer;
 
     constructor(data) {
-        super(new Vector(0.4, 0.4), new Vector(0.75, 0.75), 1);
+        super(new Vector(0.25, 0.25), new Vector(0.5, 0.5), 1);
         this.foodId = data.id;
         this.height=0;
     }
@@ -22,24 +21,8 @@ export class Food extends fallingObject {
         this.collider.set(circle);
         this.body.collisionType = CollisionType.Passive;
         this.scale=new Vector(0.25,0.25);
-<<<<<<< Updated upstream
         let sprite = Resources.Fish.toSprite();
         this.graphics.use(sprite);
-=======
-        let sprite = FoodManager.GetFoodData(this.foodId);
-        this.graphics.use(sprite);
-      /*  if(this.foodId==1)
-        {
-            let sprite = Resources.Stick.toSprite();
-            this.graphics.use(sprite);
-        }
-        else
-        {
-            let sprite = Resources.Fish.toSprite();
-            this.graphics.use(sprite);
-        }*/
-
->>>>>>> Stashed changes
         this.z = 0;
         this.scale=this.minScale;
         this.fallingTimer = 1;
