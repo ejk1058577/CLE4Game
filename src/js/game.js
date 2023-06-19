@@ -25,24 +25,22 @@ export class Game extends Engine {
 
     startGame() {
         console.log("start")
+        this.ui = new UI();
+        this.ui.z = 1000;
+        this.add(this.ui);
 
         this.pl = new player();
         this.pl.pos=new Vector(32*128,32*128)
         this.add(this.pl);
         this.playerPos=this.pl.pos;
+
         this.currentScene.camera.strategy.radiusAroundActor(this.pl,64)
-       // let sp = new Spawner(5,Food,{id:1})
-        //this.add(sp);
         let humansSpawner = new Spawner(30,Human,{},new Vector(128*64,128*64),new Vector(0,0));
         this.add(humansSpawner);
-      //  this.showDebug(true);
+
         this.nest = new Nest();
         this.add(this.nest);
         this.add(new Ground())
-
-        this.ui = new UI();
-        this.ui.z = 1000;
-        this.add(this.ui);
 
         this.add(new Arrow(this.pl,this.nest))
     }

@@ -2,12 +2,14 @@ import {Actor, Vector, Input, clamp, CollisionType, Shape} from "excalibur";
 import {Resources} from "./resources.js";
 import {fallingObject} from "./fallingObject.js";
 import { Food } from "./food.js";
+import {FoodManager} from "./foodManager.js";
 
 export class player extends fallingObject
 {
     //Refernce to engine
     game
     //ID number of the food object that is currently picked
+    displayItem
     inventory
 
     displayItem
@@ -29,13 +31,12 @@ export class player extends fallingObject
     onInitialize(_engine) {
         super.onInitialize(_engine);
         this.z = 5;
+
         this.displayItem = new Actor();
         this.displayItem.pos = this.pos;
         this.displayItem.scale=new Vector(0.5,0.5);
         this.displayItem.z = 4;
         this.scene.add(this.displayItem);
-
-       // this.displayItem.graphics.use(Resources.Human.toSprite())
         this.displayItemHeld();
         //save refernce to game engine
         this.game=_engine;
@@ -153,9 +154,7 @@ export class player extends fallingObject
         {
             case 0:this.displayItem.graphics.use(Resources.empty.toSprite());
             break;
-            case 1:this.displayItem.graphics.use(Resources.Stick.toSprite());
-            break;
-            case 2:this.displayItem.graphics.use(Resources.Fish.toSprite())
+            default:this.displayItem.graphics.use(FoodManager.GetFoodData(this.inventory));
         }
     }
 }

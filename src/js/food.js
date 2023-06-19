@@ -2,6 +2,7 @@ import {Actor, Vector, Input, clamp, CollisionType, Shape} from "excalibur";
 import {Resources} from "./resources.js";
 import {fallingObject} from "./fallingObject.js";
 import {Human} from "./human.js";
+import {FoodManager} from "./foodManager.js";
 export class Food extends fallingObject {
     foodId;
     spawner;
@@ -9,29 +10,20 @@ export class Food extends fallingObject {
     fallingTimer;
 
     constructor(data) {
-        super(new Vector(0.25, 0.25), new Vector(0.5, 0.5), 1);
+        super(new Vector(0.4, 0.4), new Vector(0.75, 0.75), 1);
         this.foodId = data.id;
         this.height=0;
     }
 
     onInitialize(_engine) {
         super.onInitialize(_engine);
-        this.z =0;
+        this.z = 0;
         const circle = Shape.Circle(64)
         this.collider.set(circle);
         this.body.collisionType = CollisionType.Passive;
-        this.scale=new Vector(0.25,0.25);
-        if(this.foodId==1)
-        {
-            let sprite = Resources.Stick.toSprite();
-            this.graphics.use(sprite);
-        }
-        else
-        {
-            let sprite = Resources.Fish.toSprite();
-            this.graphics.use(sprite);
-        }
-
+        this.scale = new Vector(0.25, 0.25);
+        let sprite = FoodManager.GetFoodData(this.foodId);
+        this.graphics.use(sprite);
         this.z = 0;
         this.scale=this.minScale;
         this.fallingTimer = 1;

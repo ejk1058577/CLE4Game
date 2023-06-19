@@ -1,4 +1,4 @@
-import {Actor, CollisionType, Ray, Shape, Vector} from "excalibur";
+import {Actor, CollisionType, Random, Shape, Vector} from "excalibur";
 import {Resources} from "./resources.js";
 import {Food} from "./food.js";
 
@@ -10,6 +10,11 @@ export class Human extends Actor
     lastPos
     inventory
 
+    rng
+
+    minFoodId=2;
+    maxFoodId=4;
+
     constructor() {
         super();
 
@@ -18,6 +23,8 @@ export class Human extends Actor
         console.log("Im a Human")
         super.onInitialize(_engine);
         this.inventory = 2;
+        this.rng = new Random();
+        this.inventory = this.rng.integer(this.minFoodId,this.maxFoodId)
         this.game=_engine;
         this.graphics.use(Resources.Human.toSprite());
         this.collider.set(Shape.Circle(64))
@@ -25,6 +32,7 @@ export class Human extends Actor
         this.angle=(2*Math.random()-1)*Math.PI*2;
         this.transform.rotation = this.angle;
         this.z = 1;
+
         //this.on("exitviewport", event => this.kill());
     }
     onPreUpdate(_engine, _delta) {
