@@ -48,8 +48,7 @@ export class player extends fallingObject
         this.collider.set(box);
         this.body.collisionType = CollisionType.Passive;
 
-        this.on('precollision', (e) => this.FoodCollision(e)
-        );
+        this.on('precollision', (e) => this.FoodCollision(e));
     }
     onPreUpdate(_engine, _delta) {
         super.onPreUpdate(_engine, _delta);

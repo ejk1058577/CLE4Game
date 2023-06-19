@@ -18,7 +18,26 @@ export class Ground extends Actor
         this.tileMap=new TileMap({rows:64,columns:64,tileWidth:128,tileHeight:128,pos:new Vector(0,0)});
         for(let i =0;i<64*64;i++)
         {
-            this.tileMap.tiles[i].addGraphic(Resources.Ground.toSprite())
+            let r = Math.random();
+            if(r>0.8)
+            {
+                let sprite = Resources.GroundCracked.toSprite()
+                sprite.scale=new Vector(2,2);
+                this.tileMap.tiles[i].addGraphic(sprite)
+            }
+            else if(r<0.2)
+            {
+                let sprite = Resources.GroundGrass.toSprite()
+                sprite.scale=new Vector(2,2);
+                this.tileMap.tiles[i].addGraphic(sprite)
+            }
+            else
+            {
+                let sprite = Resources.Ground.toSprite()
+                sprite.scale=new Vector(2,2);
+                this.tileMap.tiles[i].addGraphic(sprite)
+            }
+
         }
         this.addChild(this.tileMap);
     }

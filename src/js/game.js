@@ -18,13 +18,17 @@ export class Game extends Engine {
     pl
     nest
     ui
+
+    mousePos;
     constructor() {
         super({ width: 800, height: 600 })
         this.start(ResourceLoader).then(() => this.startGame())
+
     }
 
     startGame() {
         console.log("start")
+        this.mousePos= new Vector(0,0);
         this.ui = new UI();
         this.ui.z = 1000;
         this.add(this.ui);
@@ -46,8 +50,10 @@ export class Game extends Engine {
     }
     onPostUpdate(_engine, _delta) {
         super.onPostUpdate(_engine, _delta);
-        this.playerPos = this.pl.pos;
+        this.playerPos = this.pl.pos
+
     }
 }
 
-new Game()
+ new Game();
+
