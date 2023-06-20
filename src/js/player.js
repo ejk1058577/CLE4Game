@@ -6,8 +6,7 @@ import {FoodManager} from "./foodManager.js";
 import {PlayerInput} from "./playerInput.js";
 import {InventoryActor} from "./InventoryActor.js";
 
-export class player extends InventoryActor
-{
+export class player extends InventoryActor {
     //Refernce to engine
     game
     //ID number of the food object that is currently picked
@@ -16,31 +15,31 @@ export class player extends InventoryActor
     divingTimer
 
 
-
     constructor() {
         super();
         //se up initiaal values for variables
-        this.useHeight=true;
-        this.minScale=new Vector(0.5,0.5)
-        this.maxScale=new Vector(1,1)
-        this.height=1;
-        this.gravity=0;
-        this.angle=0;
-        this.divingTimer=-1;
-        this.isDiving=false;
+        this.useHeight = true;
+        this.minScale = new Vector(0.5, 0.5)
+        this.maxScale = new Vector(1, 1)
+        this.height = 1;
+        this.gravity = 0;
+        this.angle = 0;
+        this.divingTimer = -1;
+        this.isDiving = false;
     }
+
     onInitialize(_engine) {
         super.onInitialize(_engine);
         this.z = 5;
-        this.acceleration=50;
-        this.useTargetVel=true;
-        this.displayAngle=0;
-        this.displayDistance=25;
-        this.Display.minScale=new Vector(0.4,.4);
-        this.Display.maxScale=new Vector(0.75,0.75);
+        this.acceleration = 50;
+        this.useTargetVel = true;
+        this.displayAngle = 0;
+        this.displayDistance = 25;
+        this.Display.minScale = new Vector(0.4, .4);
+        this.Display.maxScale = new Vector(0.75, 0.75);
         this.DisplayItem()
         //save refernce to game engine
-        this.game=_engine;
+        this.game = _engine;
         //assign sprite to actor. The sprite is flipped because it faced wrong direction, might not need in final version
         let sprite = Resources.Meeuw.toSprite();
         this.graphics.use(sprite);
@@ -50,80 +49,69 @@ export class player extends InventoryActor
         this.on('precollision', (e) => this.FoodCollision(e)
         );
     }
+
     onPreUpdate(_engine, _delta) {
         super.onPreUpdate(_engine, _delta);
         //Check for player input
-        this.PlayerInput(_delta/1000);
-       // console.log(this.angle);
+        this.PlayerInput(_delta / 1000);
+        // console.log(this.angle);
         //Recalculate player velocity
         this.Move();
         //player dive
-        if(this.isDiving)
-        {
-            this.Dive(_delta/1000)
+        if (this.isDiving) {
+            this.Dive(_delta / 1000)
         }
     }
 
-    PlayerInput(delta)
-    {
+    PlayerInput(delta) {
 
-        this.angle+= delta*5*PlayerInput.MoveInput.x;
+        this.angle += delta * 5 * PlayerInput.MoveInput.x;
 
         //drop item if player not diving, is holding food when space is pressed
 
         if (PlayerInput.ActieInput) {
-            if(!this.isDiving)
-            {
+            if (!this.isDiving) {
                 if (this.inventory > 0) {
-                    this.dropItem(false,1,true,true)
-                }
-                else
-                {
+                    this.dropItem(false, 1, true, true)
+                } else {
                     this.isDiving = true;
                 }
             }
         }
         //start player dive if space is pressed and the player was not diving
     }
-    Move()
-    {
+
+    Move() {
         //rotate player
-        this.transform.rotation=this.angle;
+        this.transform.rotation = this.angle;
         //recalculate forward velocity of the player
         this.moveForward(300);
         //this.displayItem.pos=new Vector(this.pos.x,this.pos.y);
     }
 
-    Dive(delta)
-    {
-        this.divingTimer +=delta;
+    Dive(delta) {
+        this.divingTimer += delta;
 
 
-      //  console.log(this.divingTimer);
+        //  console.log(this.divingTimer);
         //takes the absolute value of diving timer and clamps it between 0 and 1 to calculate height;
-        this.height = clamp(Math.abs(this.divingTimer),0,1);
+        this.height = clamp(Math.abs(this.divingTimer), 0, 1);
         //end dive
-        if(this.divingTimer>1)
-        {
-            this.divingTimer=-1;
-            this.isDiving=false;
+        if (this.divingTimer > 1) {
+            this.divingTimer = -1;
+            this.isDiving = false;
         }
     }
 
-    FoodCollision(e)
-    {
-       // console.log("trytopick")
-        if (this.isDiving && Math.abs(this.divingTimer) < 0.2 && this.inventory==0) {
+    FoodCollision(e) {
+        // console.log("trytopick")
+        if (this.isDiving && Math.abs(this.divingTimer) < 0.2 && this.inventory == 0) {
             console.log(e.other instanceof Food);
-            if(e.other instanceof Food)
-            {
+            if (e.other instanceof Food) {
                 e.other.pickup(this);
                 this.DisplayItem();
             }
         }
     }
-    turnLeft(delta)
-    {
-        this.angle-=5*delta
-    }
+}
 
