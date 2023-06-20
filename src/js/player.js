@@ -3,6 +3,7 @@ import {Resources} from "./resources.js";
 import {fallingObject} from "./fallingObject.js";
 import { Food } from "./food.js";
 import {FoodManager} from "./foodManager.js";
+import {PlayerInput} from "./playerInput.js";
 
 export class player extends fallingObject
 {
@@ -95,23 +96,15 @@ export class player extends fallingObject
 
     PlayerInput(delta)
     {
-        //Increase or Decrease player rotation angle depending on key pressed
-        if(this.game.input.keyboard.isHeld(Input.Keys.A) || this.joystick0left)
-        {
-            this.turnLeft(delta);
-        }
-        else if(this.game.input.keyboard.isHeld(Input.Keys.D) || this.joystick0right)
-        {
-            this.turnRight(delta);
-        }
+
+        this.angle+= delta*5*PlayerInput.MoveInput.x;
 
         //drop item if player not diving, is holding food when space is pressed
 
-        if (this.game.input.keyboard.isHeld(Input.Keys.Space) || this.joystick0button0) {
-            if(!this.isDiving && !this.spacePrevState)
+        if (PlayerInput.ActieInput) {
+            if(!this.isDiving)
             {
                 this.joystick0button0 = false;
-
                 if (this.inventory > 0) {
                     let foodActor = new Food({id: this.inventory});
                     this.inventory = 0;
@@ -128,12 +121,6 @@ export class player extends fallingObject
                     this.isDiving = true;
                 }
             }
-            this.spacePrevState=true
-
-        }
-        else
-        {
-            this.spacePrevState=false;
         }
         //start player dive if space is pressed and the player was not diving
     }
@@ -186,13 +173,5 @@ export class player extends fallingObject
             break;
             default:this.displayItem.graphics.use(FoodManager.GetFoodData(this.inventory));
         }
-    }
-
-    turnRight(delta) {
-        this.angle+=delta*5;
-    }
-
-    turnLeft(delta) {
-        this.angle-=delta*5;
     }
 }
