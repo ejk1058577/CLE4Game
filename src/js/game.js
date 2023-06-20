@@ -5,7 +5,7 @@ import {player} from "./player.js";
 import {Food} from "./food.js"
 
 import {Spawner} from "./spawner.js";
-import {HumanMenager} from "./humanMenager.js";
+import {HumanSpawner} from "./humanSpawner.js";
 import {Human} from "./human.js";
 import {Nest} from "./nest.js";
 import {Ground} from "./Ground.js";
@@ -23,6 +23,7 @@ export class Game extends Engine {
     nest;
     ui;
 
+    humanSpawner;
     #arcade;
     #joyStickListener;
 
@@ -53,8 +54,8 @@ export class Game extends Engine {
         this.playerPos=this.pl.pos;
 
         this.currentScene.camera.strategy.radiusAroundActor(this.pl,64)
-        let humansSpawner = new Spawner(30,Human,{},new Vector(128*64,128*64),new Vector(0,0));
-        this.add(humansSpawner);
+        this.humansSpawner =new HumanSpawner(30); //new Spawner(30,Human,{},new Vector(128*64,128*64),new Vector(0,0));
+        this.add(this.humansSpawner);
 
         this.nest = new Nest();
         this.add(this.nest);

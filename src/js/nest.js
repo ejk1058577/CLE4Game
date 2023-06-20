@@ -59,7 +59,7 @@ export class Nest extends Actor
                     if(this.requestedItems[i]==event.other.inventory) {
                         this.timers[i]=1;
                         event.other.inventory = 0;
-                        event.other.displayItemHeld();
+                        event.other.DisplayItem();
                         console.log("delivered food")
                         this.score++;
                         this.game.ui.scoreText.text = this.score.toString();

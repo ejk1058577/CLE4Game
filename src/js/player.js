@@ -4,81 +4,51 @@ import {fallingObject} from "./fallingObject.js";
 import { Food } from "./food.js";
 import {FoodManager} from "./foodManager.js";
 import {PlayerInput} from "./playerInput.js";
+import {InventoryActor} from "./InventoryActor.js";
 
-export class player extends fallingObject
+export class player extends InventoryActor
 {
     //Refernce to engine
     game
     //ID number of the food object that is currently picked
-    displayItem
-    inventory
-
-    displayItem
     angle
     isDiving
     divingTimer
-    spacePrevState;
 
-    //arcade controls
-    joystick0left;
-    joystick0right;
-    joystick0button0;
+
 
     constructor() {
-        super(new Vector(0.75,0.75),new Vector(1,1),1);
+        super();
         //se up initiaal values for variables
+        this.useHeight=true;
+        this.minScale=new Vector(0.5,0.5)
+        this.maxScale=new Vector(1,1)
+        this.height=1;
+        this.gravity=0;
         this.angle=0;
         this.divingTimer=-1;
         this.isDiving=false;
-        this.inventory=0;
-        this.spacePrevState=false;
-        
     }
     onInitialize(_engine) {
         super.onInitialize(_engine);
         this.z = 5;
-
-        this.displayItem = new Actor();
-        this.displayItem.pos = this.pos;
-        this.displayItem.scale=new Vector(0.5,0.5);
-        this.displayItem.z = 4;
-        this.scene.add(this.displayItem);
-        this.displayItemHeld();
+        this.acceleration=50;
+        this.useTargetVel=true;
+        this.displayAngle=0;
+        this.displayDistance=25;
+        this.Display.minScale=new Vector(0.4,.4);
+        this.Display.maxScale=new Vector(0.75,0.75);
+        this.DisplayItem()
         //save refernce to game engine
         this.game=_engine;
         //assign sprite to actor. The sprite is flipped because it faced wrong direction, might not need in final version
         let sprite = Resources.Meeuw.toSprite();
         this.graphics.use(sprite);
-
-        const box = Shape.Box(100, 100);
+        const box = Shape.Circle(64);
         this.collider.set(box);
         this.body.collisionType = CollisionType.Passive;
-
         this.on('precollision', (e) => this.FoodCollision(e)
         );
-
-        //arcade controls
-        this.joystick0left = false;
-        this.joystick0right = false;
-        this.joystick0button0 = false;
-
-        document.addEventListener("joystick0left", () => {
-            this.joystick0left = true;
-            this.joystick0right = false; //yes this is necessary because both can be pressed
-        });
-        document.addEventListener("joystick0right", () => {
-            this.joystick0left = false;
-            this.joystick0right = true;
-        });
-        document.addEventListener("joystick0neutral", () => {
-            this.joystick0left = false;
-            this.joystick0right = false;
-        });
-        document.addEventListener("joystick0button0", () => {
-            if (!this.isDiving) {
-                this.joystick0button0 = true;
-            }
-        });
     }
     onPreUpdate(_engine, _delta) {
         super.onPreUpdate(_engine, _delta);
@@ -104,20 +74,11 @@ export class player extends fallingObject
         if (PlayerInput.ActieInput) {
             if(!this.isDiving)
             {
-                this.joystick0button0 = false;
                 if (this.inventory > 0) {
-                    let foodActor = new Food({id: this.inventory});
-                    this.inventory = 0;
-                    this.displayItemHeld();
-                    foodActor.pos = this.pos;
-                    foodActor.height=1;
-                    this.scene.add(foodActor);
-
-                    console.log(this.pos);
-                    console.log(foodActor.pos);
-
-                    foodActor.isFalling = true;
-                } else {
+                    this.dropItem(false,1,true,true)
+                }
+                else
+                {
                     this.isDiving = true;
                 }
             }
@@ -129,10 +90,7 @@ export class player extends fallingObject
         //rotate player
         this.transform.rotation=this.angle;
         //recalculate forward velocity of the player
-        let forward = new Vector(Math.cos(this.angle)*300,Math.sin(this.angle)*300)
-        this.vel = forward;
-        this.displayItem.rotation=this.angle;
-        this.displayItem.vel=forward;
+        this.moveForward(300);
         //this.displayItem.pos=new Vector(this.pos.x,this.pos.y);
     }
 
@@ -160,18 +118,12 @@ export class player extends fallingObject
             if(e.other instanceof Food)
             {
                 e.other.pickup(this);
-                this.displayItemHeld();
+                this.DisplayItem();
             }
         }
     }
-    displayItemHeld()
+    turnLeft(delta)
     {
-        console.log("changedDisplay",this.displayItem);
-        switch (this.inventory)
-        {
-            case 0:this.displayItem.graphics.use(Resources.empty.toSprite());
-            break;
-            default:this.displayItem.graphics.use(FoodManager.GetFoodData(this.inventory));
-        }
+        this.angle-=5*delta
     }
-}
+
