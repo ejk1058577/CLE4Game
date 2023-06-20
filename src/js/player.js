@@ -65,7 +65,7 @@ export class player extends InventoryActor {
 
     PlayerInput(delta) {
 
-        this.angle += delta * 5 * PlayerInput.MoveInput.x;
+        this.angle += delta * PlayerInput.TurnSensitivity * PlayerInput.MoveInput.x;
 
         //drop item if player not diving, is holding food when space is pressed
 

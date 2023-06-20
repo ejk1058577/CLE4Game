@@ -5,6 +5,8 @@ export class PlayerInput extends Actor
     static MoveInput;
     static ActieInput;
 
+    static TurnSensitivity=5;
+
     game;
 
     actionLast;
@@ -56,10 +58,26 @@ export class PlayerInput extends Actor
         if(this.game.input.keyboard.isHeld(Input.Keys.A) || this.joystick0left)
         {
             PlayerInput.MoveInput.x=-1;
+            if(this.joystick0left)
+            {
+                PlayerInput.TurnSensitivity=3;
+            }
+            else
+            {
+                PlayerInput.TurnSensitivity=5;
+            }
         }
         else if(this.game.input.keyboard.isHeld(Input.Keys.D) || this.joystick0right)
         {
             PlayerInput.MoveInput.x=1;
+            if(this.joystick0right)
+            {
+                PlayerInput.TurnSensitivity=3;
+            }
+            else
+            {
+                PlayerInput.TurnSensitivity=5;
+            }
         }
     }
     ActionDetection()
