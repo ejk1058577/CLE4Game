@@ -16,7 +16,7 @@ export class FoodManager
         foodIndex--;
        let y = foodIndex%this.ySprites;
        let x = (foodIndex-y)/this.xSprites
-        console.log(x,y);
+     //   console.log(x,y);
         return this.spriteSheet.getSprite(x,y);
     }
 }

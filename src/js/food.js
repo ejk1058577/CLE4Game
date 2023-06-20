@@ -3,16 +3,23 @@ import {Resources} from "./resources.js";
 import {fallingObject} from "./fallingObject.js";
 import {Human} from "./human.js";
 import {FoodManager} from "./foodManager.js";
-export class Food extends fallingObject {
+import {MovingActor} from "./MovingActor.js";
+export class Food extends MovingActor{
     foodId;
     spawner;
+    fallDestroy;
+    canHit;
     isFalling;
-    fallingTimer;
 
     constructor(data) {
-        super(new Vector(0.4, 0.4), new Vector(0.75, 0.75), 1);
+        super();
         this.foodId = data.id;
+        this.useHeight=true;
+        this.minScale=new Vector(0.4,0.4)
+        this.maxScale=new Vector(0.75,0.75)
         this.height=0;
+        this.gravity=1;
+        this.isFalling = false;
     }
 
     onInitialize(_engine) {
@@ -26,19 +33,19 @@ export class Food extends fallingObject {
         this.graphics.use(sprite);
         this.z = 0;
         this.scale=this.minScale;
-        this.fallingTimer = 1;
     }
 
     onPreUpdate(_engine, _delta) {
         super.onPreUpdate(_engine, _delta);
 
-        if (this.isFalling) {
+        if (this.isFalling)
+        {
             this.fall(_delta / 1000);
         }
     }
 
     pickup(player) {
-        player.inventory = this.foodId;
+        player.getItem(this.foodId);
         this.kill();
     }
     onPreKill(_scene) {
@@ -49,27 +56,31 @@ export class Food extends fallingObject {
     }
 
     fall(delta) {
-        this.fallingTimer -= delta;
-        this.height = clamp(Math.abs(this.fallingTimer),0,1);
         //console.log(this.fallingTimer);
-        if(this.fallingTimer<0.4)
+        if(this.height<0.4)
         {
-            this.on("precollision", event => this.humanDropItem(event))
+            if(this.canHit)
+            {
+                this.on("precollision", event => this.humanDropItem(event))
+            }
         }
-        if(this.fallingTimer<0)
+        if(this.height<=0.05)
         {
-           // this.fallingTimer=1;
             this.isFalling=false;
-            this.kill();
+            if(this.fallDestroy)
+            {
+                this.kill();
+            }
         }
     }
     humanDropItem(event)
     {
         if(event.other instanceof Human)
         {
-            this.kill();
-            console.log("humanAttacked")
-            event.other.dropItem();
+                this.kill();
+                console.log("humanAttacked")
+                event.other.speed=0;
+                event.other.dropItem(true,0.4,false,false);
         }
     }
 }

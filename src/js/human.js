@@ -2,8 +2,9 @@ import {Actor, CollisionType, GraphicsGroup, Random, Shape, Vector} from "excali
 import {Resources} from "./resources.js";
 import {Food} from "./food.js";
 import {FoodManager} from "./foodManager.js";
+import {InventoryActor} from "./InventoryActor.js";
 
-export class Human extends Actor
+export class Human extends InventoryActor
 {
     spawner
     game
@@ -16,19 +17,26 @@ export class Human extends Actor
     minFoodId=2;
     maxFoodId=4;
 
-    foodHolder
-    foodOffsetAngle = 1;
-    foodOffsetDistance = 25;
-
+    speed=80;
     constructor() {
         super();
 
     }
     onInitialize(_engine) {
         super.onInitialize(_engine);
+        this.height=0.4;
+        this.useTargetVel=true;
+        this.acceleration=50;
         this.inventory = 2;
         this.rng = new Random();
         this.inventory = this.rng.integer(this.minFoodId,this.maxFoodId)
+        this.displayAngle=1;
+        this.displayDistance=50;
+        this.Display.z=1;
+        this.Display.minScale=new Vector(0.4,.4);
+        this.Display.maxScale=new Vector(0.75,0.75);
+        this.DisplayItem()
+
         this.game=_engine;
         this.graphics.use(Resources.Human.toSprite());
 
@@ -36,13 +44,7 @@ export class Human extends Actor
         this.body.collisionType = CollisionType.Active;
         this.angle=(2*Math.random()-1)*Math.PI*2;
         this.transform.rotation = this.angle;
-        this.z = 1;
-
-        this.foodHolder=new Actor();
-        this.foodHolder.scale=new Vector(0.65,0.65);
-        this.scene.add(this.foodHolder);
-
-        this.InventoryGraphic();
+        this.z = 2;
         //this.on("exitviewport", event => this.kill());
     }
     onPreUpdate(_engine, _delta) {
@@ -54,6 +56,7 @@ export class Human extends Actor
         }
     }
     move(delta) {
+        this.speed=this.lerp(this.speed,80,this.delta)
         //rotate player
         if(this.lastPos != null) {
             let posDir = new Vector(this.pos.x - this.lastPos.x, this.pos.y - this.lastPos.y).normalize();
@@ -66,40 +69,18 @@ export class Human extends Actor
             this.lastPos=new Vector(0,0);
         }
         this.transform.rotation = this.angle;
-        let forward = new Vector(Math.cos(this.angle) * 50, Math.sin(this.angle) * 50)
-        this.vel = forward;
+        this.moveForward(this.speed);
         this.lastPos.x = this.pos.x;
         this.lastPos.y = this.pos.y;
-
-        this.foodHolder.rotation=this.angle;
-        let Offset = new Vector(Math.cos(this.angle+this.foodOffsetAngle)*this.foodOffsetDistance,Math.sin(this.angle+this.foodOffsetAngle)*this.foodOffsetDistance);
-        this.foodHolder.pos = new Vector(Offset.x+this.pos.x,Offset.y+this.pos.y);
     }
     _prekill(_scene) {
         super._prekill(_scene);
         this.spawner.currentAmount--;
-        this.foodHolder.kill();
-    }
-
-    dropItem()
-    {
-        if(this.inventory>0)
-        {
-            let droppedFood = new Food({id:this.inventory})
-            droppedFood.pos=this.pos;
-            this.scene.add(droppedFood);
-            this.inventory=0;
-            this.InventoryGraphic()
-        }
+        this.Display.kill();
     }
     lerp(a,b,t)
     {
         let v = a+t*(b-a);
         return v;
-    }
-
-    InventoryGraphic()
-    {
-     this.foodHolder.graphics.use(FoodManager.GetFoodData(this.inventory));
     }
 }

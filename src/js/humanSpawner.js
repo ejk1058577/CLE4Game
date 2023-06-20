@@ -23,11 +23,11 @@ export class HumanSpawner extends Spawner
 
     HumanSpawnPos()
     {
-        console.log("humanChangePos");
+      //  console.log("humanChangePos");
         if(this.lastSpawn!=null) {
             let dir = new Vector(this.lastSpawn.pos.x - this.pos.x, this.lastSpawn.pos.y - this.pos.y).normalize();
             let d = Math.random() * 0.5 + 0.5 * 1300;
-            console.log(d);
+           // console.log(d);
             dir.x *= d;
             dir.y *= d;
             this.lastSpawn.pos = new Vector(this.pos.x + dir.x, this.pos.y + dir.y);
