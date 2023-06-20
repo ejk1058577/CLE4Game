@@ -23,6 +23,10 @@ export class player extends fallingObject
     joystick0right;
     joystick0button0;
 
+    foodOffsetAngle = 0;
+    foodOffsetDistance = 25;
+
+
     constructor() {
         super(new Vector(0.75,0.75),new Vector(1,1),1);
         //se up initiaal values for variables
@@ -144,6 +148,9 @@ export class player extends fallingObject
         //recalculate forward velocity of the player
         let forward = new Vector(Math.cos(this.angle)*300,Math.sin(this.angle)*300)
         this.vel = forward;
+
+        let Offset = new Vector(Math.cos(this.angle+this.foodOffsetAngle)*this.foodOffsetDistance,Math.sin(this.angle+this.foodOffsetAngle)*this.foodOffsetDistance);
+        this.displayItem.pos = new Vector(Offset.x+this.pos.x,Offset.y+this.pos.y);
         this.displayItem.rotation=this.angle;
         this.displayItem.vel=forward;
         //this.displayItem.pos=new Vector(this.pos.x,this.pos.y);

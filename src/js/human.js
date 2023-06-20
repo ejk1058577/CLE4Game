@@ -1,6 +1,7 @@
-import {Actor, CollisionType, Random, Shape, Vector} from "excalibur";
+import {Actor, CollisionType, GraphicsGroup, Random, Shape, Vector} from "excalibur";
 import {Resources} from "./resources.js";
 import {Food} from "./food.js";
+import {FoodManager} from "./foodManager.js";
 
 export class Human extends Actor
 {
@@ -15,6 +16,10 @@ export class Human extends Actor
     minFoodId=2;
     maxFoodId=4;
 
+    foodHolder
+    foodOffsetAngle = 1;
+    foodOffsetDistance = 25;
+
     constructor() {
         super();
 
@@ -26,18 +31,24 @@ export class Human extends Actor
         this.inventory = this.rng.integer(this.minFoodId,this.maxFoodId)
         this.game=_engine;
         this.graphics.use(Resources.Human.toSprite());
+
         this.collider.set(Shape.Circle(64))
         this.body.collisionType = CollisionType.Active;
         this.angle=(2*Math.random()-1)*Math.PI*2;
         this.transform.rotation = this.angle;
         this.z = 1;
 
+        this.foodHolder=new Actor();
+        this.foodHolder.scale=new Vector(0.65,0.65);
+        this.scene.add(this.foodHolder);
+
+        this.InventoryGraphic();
         //this.on("exitviewport", event => this.kill());
     }
     onPreUpdate(_engine, _delta) {
         super.onPreUpdate(_engine, _delta);
         this.move(_delta/1000);
-        if(Vector.distance(this.pos,this.game.playerPos)>1024)
+        if(Vector.distance(this.pos,this.game.playerPos)>1400)
         {
             this.kill();
         }
@@ -59,10 +70,15 @@ export class Human extends Actor
         this.vel = forward;
         this.lastPos.x = this.pos.x;
         this.lastPos.y = this.pos.y;
+
+        this.foodHolder.rotation=this.angle;
+        let Offset = new Vector(Math.cos(this.angle+this.foodOffsetAngle)*this.foodOffsetDistance,Math.sin(this.angle+this.foodOffsetAngle)*this.foodOffsetDistance);
+        this.foodHolder.pos = new Vector(Offset.x+this.pos.x,Offset.y+this.pos.y);
     }
     _prekill(_scene) {
         super._prekill(_scene);
         this.spawner.currentAmount--;
+        this.foodHolder.kill();
     }
 
     dropItem()
@@ -73,11 +89,17 @@ export class Human extends Actor
             droppedFood.pos=this.pos;
             this.scene.add(droppedFood);
             this.inventory=0;
+            this.InventoryGraphic()
         }
     }
     lerp(a,b,t)
     {
         let v = a+t*(b-a);
         return v;
+    }
+
+    InventoryGraphic()
+    {
+     this.foodHolder.graphics.use(FoodManager.GetFoodData(this.inventory));
     }
 }

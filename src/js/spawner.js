@@ -12,6 +12,8 @@ export class Spawner extends Actor
 
     spawnArea
     spawnOffset
+
+    lastSpawn
     constructor(targetAmount,SpawnObject,SpawnParam,spawnArea,spawnOffset) {
         super();
         this.targetAmount=targetAmount;
@@ -44,8 +46,9 @@ export class Spawner extends Actor
         spawn.spawner = this;
         this.scene.add(spawn);
         this.currentAmount++;
+        this.lastSpawn=spawn;
         if(this.afterBehaviour != null) {
-            this.afterBehaviour(spawn)
+            this.afterBehaviour()
         }
     }
 }
