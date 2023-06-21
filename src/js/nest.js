@@ -1,6 +1,8 @@
 import {Actor, Random, Shape, Vector} from "excalibur";
 import {Resources} from "./resources.js";
 import {player} from "./player.js";
+import {FoodManager} from "./foodManager.js";
+import {Ground} from "./Ground.js";
 
 export class Nest extends Actor
 {
@@ -9,13 +11,10 @@ export class Nest extends Actor
     timers;
     score;
     rng
-    minFoodId=2;
-    maxFoodId=4;
-
     deliveryTime=30
     constructor() {
         super();
-        this.pos=new Vector(32*128,32*128)
+        this.pos=new Vector(3*Ground.spacing,3*Ground.spacing)
         this.score=0
     }
     onInitialize(_engine) {
@@ -41,7 +40,7 @@ export class Nest extends Actor
 
     RequestNewItem(slot)
     {
-        this.requestedItems[slot]= this.rng.integer(this.minFoodId,this.maxFoodId)
+        this.requestedItems[slot]= this.rng.integer(FoodManager.minId,FoodManager.maxID)
         console.log(this.requestedItems[slot]);
         this.game.ui.changeRequestDisplay(this.requestedItems[slot]);
         //console.log(this.game.ui.requestItem);

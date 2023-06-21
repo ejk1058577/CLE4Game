@@ -11,6 +11,8 @@ export class FoodManager
     });
     static xSprites=2;
     static ySprites=2;
+    static minId=2
+    static maxID=4
     static GetFoodData(foodIndex)
     {
         foodIndex--;

@@ -13,6 +13,7 @@ import {UI} from "./UI.js";
 import {Arrow} from "./Arrow.js";
 import { Arcade } from "arcade-game"
 import {PlayerInput} from "./playerInput.js";
+import {Markt} from "./Markt.js";
 
 export class Game extends Engine {
 
@@ -28,11 +29,12 @@ export class Game extends Engine {
     #joyStickListener;
 
     constructor() {
-        super({ width: 800, height: 600 })
+        super({ width: window.innerWidth-5, height: window.innerHeight-1})
         this.start(ResourceLoader).then(() => this.startGame())
     }
 
     startGame() {
+        document.addEventListener("keydown", this.preventSpace)
         console.log("start")
         this.plInput = new PlayerInput();
         this.add(this.plInput);
@@ -47,30 +49,37 @@ export class Game extends Engine {
         this.#joyStickListener = (e) => this.#joyStickFound(e);
         document.addEventListener("joystickcreated",  this.#joyStickListener); //this listener does not work.
         //setTimeout(this.#joyStickListener, 5000); used this for debugging.
+        this.add(new Ground())
 
         this.pl = new player();
-        this.pl.pos=new Vector(32*128,32*128)
+        this.pl.pos=new Vector(3*Ground.spacing,3*Ground.spacing)
         this.add(this.pl);
         this.playerPos=this.pl.pos;
 
         this.currentScene.camera.strategy.radiusAroundActor(this.pl,64)
-        this.humansSpawner =new HumanSpawner(30); //new Spawner(30,Human,{},new Vector(128*64,128*64),new Vector(0,0));
+        this.currentScene.camera.zoom=1.25;
+        this.humansSpawner =new HumanSpawner(15); //new Spawner(30,Human,{},new Vector(128*64,128*64),new Vector(0,0));
         this.add(this.humansSpawner);
 
         this.nest = new Nest();
         this.add(this.nest);
-        this.add(new Ground())
 
         this.add(new Arrow(this.pl,this.nest))
+        this.showDebug(true);
+        this.debug.transform.showAll=true;
     }
     onPostUpdate(_engine, _delta) {
         super.onPostUpdate(_engine, _delta);
         this.playerPos = this.pl.pos;
     }
 
-
+    preventSpace(e)
+    {
+        e.preventDefault();
+    }
     //sample function for debug
-    #joyStickFound(e) {
+    #joyStickFound(e)
+    {
         let joystick = this.#arcade.Joysticks[0] //hardcoded zero here for debugging purposes. 
         
         // debug, this shows you the names of the buttons when they are pressed

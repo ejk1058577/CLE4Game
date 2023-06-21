@@ -12,7 +12,7 @@ export class Tree extends Spawner
     onInitialize(_engine) {
         super.onInitialize(_engine);
         this.graphics.use(Resources.Tree.toSprite())
-        this.collider.set(Shape.Box(128,128));
+        this.collider.set(Shape.Circle(60)); //Shape.Box(112,112));
         this.body.collisionType = CollisionType.Fixed;
     }
 }

@@ -32,7 +32,7 @@ export class InventoryActor extends MovingActor
         let offset = new Vector(Math.cos(this.angle+this.displayAngle)*this.displayDistance,Math.sin(this.angle+this.displayAngle)*this.displayDistance);
         this.Display.pos = new Vector(offset.x+this.pos.x,offset.y+this.pos.y);
         this.Display.vel=this.vel;
-        this.Display.rotation=this.rotation;
+        this.Display.rotation=this.angle;
         this.Display.height=this.height;
     }
     getItem(itemID)

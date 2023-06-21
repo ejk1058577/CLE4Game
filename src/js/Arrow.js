@@ -6,6 +6,8 @@ export class Arrow extends Actor
     current
     destination
 
+    game
+
     constructor(current,destination) {
         super();
         this.current=current;
@@ -13,6 +15,7 @@ export class Arrow extends Actor
     }
     onInitialize(_engine) {
         super.onInitialize(_engine);
+        this.game=_engine;
         this.graphics.use(Resources.arrow.toSprite());
         this.z = 50
     }
@@ -23,6 +26,7 @@ export class Arrow extends Actor
         let angle = dir.toAngle()
         this.rotation=angle;
         this.pos = new Vector(this.current.pos.x+dir.x*64,this.current.pos.y+dir.y*64);
+        this.vel = this.game.pl.vel;
     }
 
 }

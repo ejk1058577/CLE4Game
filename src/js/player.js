@@ -19,7 +19,7 @@ export class player extends InventoryActor {
         super();
         //se up initiaal values for variables
         this.useHeight = true;
-        this.minScale = new Vector(0.5, 0.5)
+        this.minScale = new Vector(0.75, 0.75)
         this.maxScale = new Vector(1, 1)
         this.height = 1;
         this.gravity = 0;
@@ -85,7 +85,7 @@ export class player extends InventoryActor {
         //rotate player
         this.transform.rotation = this.angle;
         //recalculate forward velocity of the player
-        this.moveForward(300);
+        this.moveForward(250);
         //this.displayItem.pos=new Vector(this.pos.x,this.pos.y);
     }
 
@@ -95,7 +95,7 @@ export class player extends InventoryActor {
 
         //  console.log(this.divingTimer);
         //takes the absolute value of diving timer and clamps it between 0 and 1 to calculate height;
-        this.height = clamp(Math.abs(this.divingTimer), 0, 1);
+        this.height = clamp(this.divingTimer*this.divingTimer, 0, 1);
         //end dive
         if (this.divingTimer > 1) {
             this.divingTimer = -1;

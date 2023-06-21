@@ -60,11 +60,11 @@ export class PlayerInput extends Actor
             PlayerInput.MoveInput.x=-1;
             if(this.joystick0left)
             {
-                PlayerInput.TurnSensitivity=3;
+                PlayerInput.TurnSensitivity=2.5;
             }
             else
             {
-                PlayerInput.TurnSensitivity=5;
+                PlayerInput.TurnSensitivity=4;
             }
         }
         else if(this.game.input.keyboard.isHeld(Input.Keys.D) || this.joystick0right)
@@ -72,11 +72,11 @@ export class PlayerInput extends Actor
             PlayerInput.MoveInput.x=1;
             if(this.joystick0right)
             {
-                PlayerInput.TurnSensitivity=3;
+                PlayerInput.TurnSensitivity=2.5;
             }
             else
             {
-                PlayerInput.TurnSensitivity=5;
+                PlayerInput.TurnSensitivity=4;
             }
         }
     }

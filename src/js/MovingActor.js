@@ -14,6 +14,7 @@ export class MovingActor extends Actor
 
     useRotation;
     targetAngle;
+    angle;
     rotSpeed;
 
     delta;
@@ -44,6 +45,10 @@ export class MovingActor extends Actor
         {
             this.accelerateObject()
         }
+        if(this.useRotation)
+        {
+            this.rotateTowards();
+        }
     }
     scaleObject()
     {
@@ -56,7 +61,7 @@ export class MovingActor extends Actor
     }
     rotateTowards()
     {
-        this.rotation=this.lerp(this.rotation,this.targetAngle,this.rotSpeed*this.delta)
+        this.angle=this.lerp(this.angle,this.targetAngle,this.rotSpeed*this.delta)
     }
     static getDirFromAngle(angle)
     {

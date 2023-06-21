@@ -79,7 +79,7 @@ export class Food extends MovingActor{
         {
                 this.kill();
                 console.log("humanAttacked")
-                event.other.speed=0;
+                event.other.speed=-100;
                 event.other.dropItem(true,0.4,false,false);
         }
     }
