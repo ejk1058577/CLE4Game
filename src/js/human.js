@@ -12,6 +12,7 @@ export class Human extends InventoryActor
     game
     angle
     lastPos
+    lastAngle;
     rng
 
     lastInventory;
@@ -51,6 +52,7 @@ export class Human extends InventoryActor
         this.body.bounciness=1;
         this.body.friction=0;
         this.angle=(2*Math.random()-1)*Math.PI*2;
+        this.lastAngle=this.angle;
         this.transform.rotation = this.angle;
         this.z = 2;
         this.on('precollision',event => this.hasCollided(event))
@@ -102,6 +104,7 @@ export class Human extends InventoryActor
         {
             this.useRotation=false;
         }
+        this.angle = this.lerp(this.angle,this.lastAngle,this.delta)
         this.transform.rotation = this.angle;
         if(this.walkTarget==null) {
             this.moveForward(this.speed);
@@ -117,6 +120,7 @@ export class Human extends InventoryActor
         }
         this.lastPos.x = this.pos.x;
         this.lastPos.y = this.pos.y;
+        this.lastAngle=this.angle;
 
     }
     _prekill(_scene) {

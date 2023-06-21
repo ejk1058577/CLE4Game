@@ -65,8 +65,8 @@ export class Game extends Engine {
         this.add(this.nest);
 
         this.add(new Arrow(this.pl,this.nest))
-        this.showDebug(true);
-        this.debug.transform.showAll=true;
+  //      this.showDebug(true);
+    //    this.debug.transform.showAll=true;
     }
     onPostUpdate(_engine, _delta) {
         super.onPostUpdate(_engine, _delta);
