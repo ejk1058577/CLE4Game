@@ -35,27 +35,27 @@ export class Highscore {
     async requestScores() {
         return new Promise(async (res, rej) => {
             let response;
-            response = await fetch(this.baseUrl).catch((e) => {
+            response = await fetch(`${this.baseUrl}?key=${this.key}`).catch((e) => {
                 rej(e);
             });
-            
-            if (!response || !response.ok) {
-                this.connected = false;
-                rej(response);
-                return;
-            }
 
-            this.connected = true;
-            let json = await response.json();
-            res(json);
+            if (response.ok) {
+                this.connected = true;
+                let json = await response.json();
+                res(json);
+            }
+            
+            this.connected = false;
+            rej(response);
         });
     }
 
     sendScore(name, score, callback) {
         return new Promise(async (res, rej) => {
-            let response = await this.postData(this.baseUrl + 'add', {name: name, score: score});
+            let response = await this.postData(this.baseUrl + 'add.php', {name: name, score: score, key: this.key});
             if (response.ok) {
-                res(response);
+                let json = await response.json();
+                res(json);
                 if (callback) {
                     callback()
                 }
@@ -80,7 +80,7 @@ export class Highscore {
                 body: JSON.stringify(data), // body data type must match "Content-Type" header
             });
 
-            return response.json(); // parses JSON response into native JavaScript objects
+                return response; // parses JSON response into native JavaScript objects
         } catch (e) {
             return e;
         }
