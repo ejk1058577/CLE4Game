@@ -14,6 +14,8 @@ import {Arrow} from "./Arrow.js";
 import { Arcade } from "arcade-game"
 import {PlayerInput} from "./playerInput.js";
 
+import { Highscore } from './highscore';
+
 export class Game extends Engine {
 
     playerPos;
@@ -40,6 +42,18 @@ export class Game extends Engine {
         this.ui = new UI();
         this.ui.z = 1000;
         this.add(this.ui);
+
+        //testing highscore.js
+        let hs = new Highscore();
+        hs.sendScore('developer', 100)
+            .then(res => console.log(res))
+            .catch(rej => console.log(rej));
+        hs.sendScore('developer', 101)
+            .then(res => console.log(res))
+            .catch(rej => console.log(rej));
+        hs.loadScores().
+            then((res) => console.log(res))
+            .catch(rej => console.log(rej));
 
         //#arcade controls
         console.log("loading #arcade controls");
