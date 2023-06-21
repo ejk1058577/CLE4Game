@@ -15,6 +15,8 @@ import { Arcade } from "arcade-game"
 import {PlayerInput} from "./playerInput.js";
 import {Markt} from "./Markt.js";
 
+import { Highscore } from './highscore';
+
 export class Game extends Engine {
 
     playerPos;
