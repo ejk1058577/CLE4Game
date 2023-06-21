@@ -13,6 +13,7 @@ export class player extends InventoryActor {
     angle
     isDiving
     divingTimer
+    speed;
 
 
     constructor() {
@@ -26,6 +27,7 @@ export class player extends InventoryActor {
         this.angle = 0;
         this.divingTimer = -1;
         this.isDiving = false;
+        this.speed = 250;
     }
 
     onInitialize(_engine) {
@@ -53,19 +55,19 @@ export class player extends InventoryActor {
     onPreUpdate(_engine, _delta) {
         super.onPreUpdate(_engine, _delta);
         //Check for player input
-        this.PlayerInput(_delta / 1000);
+        this.PlayerInput();
         // console.log(this.angle);
         //Recalculate player velocity
         this.Move();
         //player dive
         if (this.isDiving) {
-            this.Dive(_delta / 1000)
+            this.Dive()
         }
     }
 
-    PlayerInput(delta) {
+    PlayerInput() {
 
-        this.angle += delta * PlayerInput.TurnSensitivity * PlayerInput.MoveInput.x;
+        this.angle += this.delta * PlayerInput.TurnSensitivity * PlayerInput.MoveInput.x;
 
         //drop item if player not diving, is holding food when space is pressed
 
@@ -85,12 +87,12 @@ export class player extends InventoryActor {
         //rotate player
         this.transform.rotation = this.angle;
         //recalculate forward velocity of the player
-        this.moveForward(250);
+        this.moveForward(this.speed);
         //this.displayItem.pos=new Vector(this.pos.x,this.pos.y);
     }
 
-    Dive(delta) {
-        this.divingTimer += delta;
+    Dive() {
+        this.divingTimer += this.delta;
 
 
         //  console.log(this.divingTimer);
