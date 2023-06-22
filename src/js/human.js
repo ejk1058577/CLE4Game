@@ -84,7 +84,7 @@ export class Human extends InventoryActor
         }
     }
     move() {
-        this.interval = (this.interval+1)%5
+        this.interval = (this.interval+1)%4
         let effectiveSpeed = Math.max(0,this.speed);
         if(this.allowMove==true) {
             this.speed = this.lerp(this.speed, 80, this.delta)
@@ -94,11 +94,11 @@ export class Human extends InventoryActor
                 // this.targetAngle=this.angle;
                 if (this.walkTarget == null) {
                     this.moveForward(effectiveSpeed)
-                    this.targetAngle = this.lerp(this.targetAngle,MovingActor.getAngleFromDir(this.vel.normalize()),this.delta*0.5);
+                    this.targetAngle = this.lerp(this.targetAngle,MovingActor.getAngleFromDir(this.vel.normalize()),this.delta);
                     this.rotation = this.angle;
                 } else {
                     let targetDir = new Vector(this.walkTarget.pos.x - this.pos.x, this.walkTarget.pos.y - this.pos.y).normalize()
-                    this.targetAngle = this.lerp(this.targetAngle,MovingActor.getAngleFromDir(targetDir),this.delta*0.5);
+                    this.targetAngle = this.lerp(this.targetAngle,MovingActor.getAngleFromDir(targetDir),this.delta);
                     this.rotation = this.angle;
                     this.moveForward(effectiveSpeed)
                 }
