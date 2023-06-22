@@ -1,5 +1,5 @@
 import '../css/style.css'
-import { Actor, Engine, Vector, Shape, Text,Font,Color} from "excalibur"
+import { Actor, Engine, Vector, Shape, Text,Font,Color, Input} from "excalibur"
 import { Resources, ResourceLoader } from './resources.js'
 import {player} from "./player.js";
 import {Food} from "./food.js"
@@ -31,8 +31,8 @@ export class Game extends Engine {
 
     username;
 
-    constructor() {
-        super({ width: 800, height: 600 })
+    constructor(options) {
+        super(options)
         this.start(ResourceLoader).then(() => this.startGame())
         this.username = 'Guest';
     }
@@ -105,4 +105,17 @@ export class Game extends Engine {
     }
 }
 
-const __game = new Game(); //might be useful lol
+// Create our game
+const game = new Game({
+    /**
+     * Specify our custom canvas element so Excalibur doesn't make one
+     */
+    canvasElementId: 'game',
+    /**
+     * Specify pointer scope to ensure that excalibur won't capture the mouse input
+     * meant to be captured by HTML GUI
+     */
+    pointerScope: Input.PointerScope.Canvas,
+    width: 800, 
+    height: 600
+  })
