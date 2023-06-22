@@ -14,6 +14,7 @@ body {
 
 #root #ui {
     /* This will make the UI appear on top of the canvas */
+    /* TODO: Remember to change resolution to adjust for game */
     position: absolute;
     top: 0;
     left: 0;
