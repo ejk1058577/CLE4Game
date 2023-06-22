@@ -17,7 +17,6 @@ import { gameScene } from './gameScene.js'
 import { menuScene } from './menuScene.js';
 import { gameoverScene } from './gameoverScene.js';
 
-
 export class Game extends Engine {
 
     playerPos;
@@ -30,14 +29,17 @@ export class Game extends Engine {
     #arcade;
     #joyStickListener;
 
+    username;
+
     constructor() {
         super({ width: 800, height: 600 })
         this.start(ResourceLoader).then(() => this.startGame())
+        this.username = 'Guest';
     }
 
     startGame() {
         this.add('gameScene', new gameScene())   
-        this.add('menuScene', new menuScene())
+        this.add('menuScene', new menuScene(this))
         this.add('gameoverScene', new gameoverScene())
 
         this.goToScene('menuScene')
@@ -103,4 +105,4 @@ export class Game extends Engine {
     }
 }
 
-new Game()
+const __game = new Game(); //might be useful lol
