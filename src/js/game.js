@@ -6,19 +6,12 @@ import { Arcade } from "arcade-game"
 import { gameScene } from './gameScene.js'
 import { menuScene } from './menuScene.js';
 import { gameoverScene } from './gameoverScene.js';
+import {PlayerInput} from "./playerInput.js";
 
 export class Game extends Engine {
 
-    Obstacles;
-    playerPos;
-
-    plInput;
-    pl;
-    nest;
-
-    humanSpawner;
-
-    query;
+    plInput
+    score
     #arcade;
     #joyStickListener;
 
@@ -31,9 +24,9 @@ export class Game extends Engine {
     }
 
     startGame() {
-        this.query = this.currentScene.world.queryManager.createQuery(["Obstacle"])
+
         document.addEventListener("keydown", this.preventSpace)
-        this.add('gameScene', new gameScene())   
+        this.add('gameScene', new gameScene())
         this.add('menuScene', new menuScene(this))
         this.add('gameoverScene', new gameoverScene())
 
@@ -45,7 +38,7 @@ export class Game extends Engine {
         this.#joyStickListener = (e) => this.#joyStickFound(e);
         document.addEventListener("joystickcreated",  this.#joyStickListener); //this listener does not work.
         //setTimeout(this.#joyStickListener, 5000); used this for debugging.
-        this.add(new Ground())
+       // this.add(new Ground())
     }
 
     onPostUpdate(_engine, _delta) {

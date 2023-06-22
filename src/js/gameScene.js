@@ -10,19 +10,20 @@ import { PlayerInput } from "./playerInput.js";
 
 export class gameScene extends Scene {
     title = null;
+    game
     playerPos;
     plInput;
     pl;
     nest;
     ui;
-    humanSpawner;
+
+    query
+    Obstacles;
 
     onInitialize(_engine) {
         console.log('game scene initd')
-    }
-
-    onActivate(_engine) {
-        console.log("start")
+        this.add(new Ground())
+        this.game=_engine;
         this.plInput = new PlayerInput();
         this.add(this.plInput);
 
@@ -47,15 +48,18 @@ export class gameScene extends Scene {
 
         this.nest = new Nest();
         this.add(this.nest);
-        this.add(new Ground())
+
 
         this.add(new Arrow(this.pl,this.nest))
+    }
+
+    onActivate(_engine) {
+        console.log("start")
     }
 
     onPostUpdate(_engine, _delta) {
         super.onPostUpdate(_engine, _delta);
         this.playerPos = this.pl.pos;
         this.Obstacles = this.query.getEntities();
-       // console.log(ObstacleFinder.Objects);
     }
 }

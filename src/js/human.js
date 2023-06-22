@@ -89,6 +89,7 @@ export class Human extends InventoryActor
         if(this.allowMove==true) {
             this.speed = this.lerp(this.speed, 80, this.delta)
             let rayResult = this.TestRay(this, this.vel, 3, 500, Human.angleSpacing, -Human.angleSpacing)
+
             if (rayResult.rayID == -1 || this.interval > 0) {
                 // this.targetAngle=this.angle;
                 if (this.walkTarget == null) {
@@ -109,9 +110,9 @@ export class Human extends InventoryActor
             //    console.log(Vector.distance(this.pos,rayResult.hitPoint));
                 let turn = 0;
                 if (rayID ==0) {
-                    turn = this.delta * 5;
-                } else if (rayID ==2) {
                     turn = -this.delta * 5;
+                } else if (rayID ==2) {
+                    turn = this.delta * 5;
                 }
                 this.targetAngle += turn;
                 this.rotation = this.angle;
@@ -163,23 +164,23 @@ export class Human extends InventoryActor
     {
         let point=null;
         let result={rayID:-1,hitPoint:new Vector(Infinity,Infinity)};
-        for(const index in this.game.Obstacles)
-        {
-            let GameObj = this.game.Obstacles[index]
-            if(Vector.distance(GameObj.pos,Caller.pos)<=maxDistance)
-            {
-                let rayAngle=MovingActor.getAngleFromDir(Direction)+startOffset;
-                for(let i =0;i<Rays;i++)
-                {
-                    let rayDir = MovingActor.getDirFromAngle(rayAngle+i*raySpacing);
-                    let ray = new Ray(Caller.pos,rayDir);
-                    point=GameObj.collider.get().rayCast(ray);
-                    if(point instanceof Vector && point.x != Infinity)
-                    {
-                        let dist = Vector.distance(Caller.pos,point);
-                        if(dist<Vector.distance(Caller.pos,result.hitPoint) && dist<320) {
-                            result.rayID = i;
-                            result.hitPoint = point;
+        for(const index in this.game.currentScene.Obstacles) {
+            let GameObj = this.game.currentScene.Obstacles[index]
+            if (Caller != GameObj) {
+                if (Vector.distance(GameObj.pos, Caller.pos) <= maxDistance) {
+                    let rayAngle = MovingActor.getAngleFromDir(Direction) + startOffset;
+                    for (let i = 0; i < Rays; i++) {
+                        let rayDir = MovingActor.getDirFromAngle(rayAngle + i * raySpacing);
+                        let ray = new Ray(Caller.pos, rayDir);
+                        point = GameObj.collider.get().rayCast(ray);
+                        if (point instanceof Vector && point.x != Infinity)
+                        {
+                            let dist = Vector.distance(Caller.pos, point);
+                            if (dist < Vector.distance(Caller.pos, result.hitPoint) && dist < 320)
+                            {
+                                result.rayID = i;
+                                result.hitPoint = point;
+                            }
                         }
                     }
                 }
