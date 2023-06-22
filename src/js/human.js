@@ -50,7 +50,7 @@ export class Human extends InventoryActor
     onPreUpdate(_engine, _delta) {
         super.onPreUpdate(_engine, _delta);
         this.move(_delta/1000);
-        if(Vector.distance(this.pos,this.game.playerPos)>1400)
+        if(Vector.distance(this.pos,this.scene.playerPos)>1400)
         {
             this.kill();
         }

@@ -13,6 +13,10 @@ import {UI} from "./UI.js";
 import {Arrow} from "./Arrow.js";
 import { Arcade } from "arcade-game"
 import {PlayerInput} from "./playerInput.js";
+import { gameScene } from './gameScene.js'
+import { menuScene } from './menuScene.js';
+import { gameoverScene } from './gameoverScene.js';
+
 
 export class Game extends Engine {
 
@@ -21,7 +25,6 @@ export class Game extends Engine {
     plInput;
     pl;
     nest;
-    ui;
 
     humanSpawner;
     #arcade;
@@ -33,13 +36,20 @@ export class Game extends Engine {
     }
 
     startGame() {
-        console.log("start")
-        this.plInput = new PlayerInput();
-        this.add(this.plInput);
-        //ui
-        this.ui = new UI();
-        this.ui.z = 1000;
-        this.add(this.ui);
+        this.add('gameScene', new gameScene())   
+        this.add('menuScene', new menuScene())
+        this.add('gameoverScene', new gameoverScene())
+
+        this.goToScene('menuScene')
+        // this.goToScene('gameScene')
+
+        // console.log("start")
+        // this.plInput = new PlayerInput();
+        // this.add(this.plInput);
+        // //ui
+        // this.ui = new UI();
+        // this.ui.z = 1000;
+        // this.add(this.ui);
 
         //#arcade controls
         console.log("loading #arcade controls");
@@ -48,26 +58,29 @@ export class Game extends Engine {
         document.addEventListener("joystickcreated",  this.#joyStickListener); //this listener does not work.
         //setTimeout(this.#joyStickListener, 5000); used this for debugging.
 
-        this.pl = new player();
-        this.pl.pos=new Vector(32*128,32*128)
-        this.add(this.pl);
-        this.playerPos=this.pl.pos;
+        // this.pl = new player();
+        // this.pl.pos=new Vector(32*128,32*128)
+        // this.add(this.pl);
+        // this.playerPos=this.pl.pos;
 
-        this.currentScene.camera.strategy.radiusAroundActor(this.pl,64)
-        this.humansSpawner =new HumanSpawner(30); //new Spawner(30,Human,{},new Vector(128*64,128*64),new Vector(0,0));
-        this.add(this.humansSpawner);
+        // this.currentScene.camera.strategy.radiusAroundActor(this.pl,64)
+        // this.humansSpawner =new HumanSpawner(30); //new Spawner(30,Human,{},new Vector(128*64,128*64),new Vector(0,0));
+        // this.add(this.humansSpawner);
 
-        this.nest = new Nest();
-        this.add(this.nest);
-        this.add(new Ground())
+        // this.nest = new Nest();
+        // this.add(this.nest);
+        // this.add(new Ground())
 
-        this.add(new Arrow(this.pl,this.nest))
+        // this.add(new Arrow(this.pl,this.nest))
+
+        // this.add('menuScene', new menuScene())
+        // this.add('gameoverScene', new gameoverScene())
     }
+
     onPostUpdate(_engine, _delta) {
         super.onPostUpdate(_engine, _delta);
-        this.playerPos = this.pl.pos;
+        //this.playerPos = this.pl.pos;
     }
-
 
     //sample function for debug
     #joyStickFound(e) {
@@ -89,6 +102,5 @@ export class Game extends Engine {
         document.removeEventListener("joystickcreated", this.#joyStickListener)
     }
 }
-
 
 new Game()

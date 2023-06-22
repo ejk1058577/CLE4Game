@@ -2,6 +2,7 @@ import {Actor, Random, Vector} from "excalibur";
 
 export class Spawner extends Actor
 {
+    scene;
     game;
     targetAmount;
     currentAmount;
@@ -27,6 +28,7 @@ export class Spawner extends Actor
         super.onInitialize(_engine);
         console.log("spawner active")
         this.game=_engine;
+        this.scene=this.game.currentScene;
         this.rng =new Random()
     }
 

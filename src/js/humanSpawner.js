@@ -15,7 +15,7 @@ export class HumanSpawner extends Spawner
     }
     onPreUpdate(_engine, _delta) {
         super.onPreUpdate(_engine, _delta);
-        this.pos=this.game.pl.pos;
+        this.pos=this.scene.pl.pos;
         this.spawnOffset.x = -250+this.pos.x;
         this.spawnOffset.y = -250+this.pos.y;
 

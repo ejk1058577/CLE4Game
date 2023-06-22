@@ -11,6 +11,7 @@ import stickImage from '../images/stick.png'
 import empty from '../images/empty.png'
 import arrow from '../images/arrow.png'
 import food from '../images/Food.png'
+import titleImage from '../images/loadingscreen.png'
 
 const Resources = {
     Fish: new ImageSource(fishImage),
@@ -24,9 +25,13 @@ const Resources = {
     Stick:new ImageSource(stickImage),
     empty:new ImageSource(empty),
     arrow: new ImageSource(arrow),
-    Food: new ImageSource(food)
+    Food: new ImageSource(food),
+    Title: new ImageSource(titleImage)
 }
 
-const ResourceLoader = new Loader([Resources.Fish,Resources.Meeuw,Resources.Human, Resources.Nest,Resources.Ground,Resources.GroundGrass,Resources.GroundCracked,Resources.Tree,Resources.Stick,Resources.empty,Resources.arrow,Resources.Food])
-
+const ResourceLoader = new Loader([Resources.Fish,Resources.Meeuw,Resources.Human, Resources.Nest,Resources.Ground,Resources.GroundGrass,Resources.GroundCracked,Resources.Tree,Resources.Stick,Resources.empty,Resources.arrow,Resources.Food,Resources.Title])
+ResourceLoader.logo = titleImage
+ResourceLoader.logoPosition
+// ResourceLoader.logoWidth = 659
+// ResourceLoader.logoHeight = 203
 export { Resources, ResourceLoader }
