@@ -7,7 +7,6 @@ export class menuScene extends Scene {
 
     constructor(engine) {
         super(engine);
-        
         this.game = engine;
         this.menuUI = document.getElementById('ui');
     }

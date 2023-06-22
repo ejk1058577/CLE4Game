@@ -32,10 +32,10 @@ body {
 }
 
   /* These are scene-based UI styles */
-#ui.mainmenu .button {
+#ui .button {
     background-color: darkgray;
     color: white;
-    width: 10em;
+    width: 8em;
     font-size: 1.5em;
     border-radius: 4px;
 }
@@ -43,16 +43,24 @@ body {
 #ui.mainmenu .input {
     background-color: darkgray;
     color: white;
-    width: 10em;
+    width: 7.7em;
     font-size: 1.5em;
     border-radius: 4px;
 }
 
-#ui.mainmenu .wrapper {
+#ui .wrapper {
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     gap: 0.5em;
+    align-items: center;
+}
+
+#ui .wrapper-hz {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
 }
 
