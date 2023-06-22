@@ -17,6 +17,15 @@ body {
     position: absolute;
     top: 0;
     left: 0;
+    font-family: VT323;
+}
+
+#root #ui input {
+    font-family: VT323;
+}
+
+#root #ui button {
+    font-family: VT323;
 }
 
   /* These are scene-based UI styles */
