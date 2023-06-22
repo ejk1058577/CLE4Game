@@ -19,6 +19,13 @@ export class menuScene extends Scene {
     onActivate() {
         this.menuUI.classList.add('mainmenu');
 
+        //wrapper div
+        let wrapper = document.createElement('div');
+
+        //logooo
+        let logo = document.createElement('img');
+        logo.src = './src/images/loadingscreen.png';
+
         //create input field for username
         let inputName = document.createElement('input');
         inputName.type = 'text';
@@ -31,6 +38,7 @@ export class menuScene extends Scene {
         btnSettings.innerHTML = 'Settings ?';
     
         // Style it outside JavaScript for ease of use
+        wrapper.className = 'wrapper';
         inputName.className = 'input';
         btnStart.className = 'button';
         btnSettings.className = btnStart.className;
@@ -54,9 +62,13 @@ export class menuScene extends Scene {
           }
     
         // Append to our `this.menuUI` container
-        this.menuUI.appendChild(inputName);
-        this.menuUI.appendChild(btnStart);
-        this.menuUI.appendChild(btnSettings);
+        wrapper.appendChild(logo);
+
+        wrapper.appendChild(inputName);
+        wrapper.appendChild(btnStart);
+        wrapper.appendChild(btnSettings);
+
+        this.menuUI.appendChild(wrapper);
       }
     
       onDeactivate() {
