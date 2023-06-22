@@ -19,9 +19,16 @@ export class gameScene extends Scene {
     humanSpawner;
 
     onInitialize(_engine) {
+        console.log('game scene initd')
+    }
+
+    onActivate() {
         console.log("start")
         this.plInput = new PlayerInput();
         this.add(this.plInput);
+
+        //what is this
+        this.query = this.currentScene.world.queryManager.createQuery(["Obstacle"])
 
         //ui
         this.ui = new UI();
@@ -42,5 +49,12 @@ export class gameScene extends Scene {
         this.add(new Ground())
 
         this.add(new Arrow(this.pl,this.nest))
+    }
+
+    onPostUpdate(_engine, _delta) {
+        super.onPostUpdate(_engine, _delta);
+        this.playerPos = this.pl.pos;
+        this.Obstacles = this.query.getEntities();
+       // console.log(ObstacleFinder.Objects);
     }
 }
