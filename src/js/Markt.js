@@ -38,9 +38,10 @@ export class Markt extends Actor
         super.onInitialize(_engine);
         this.addTag("Obstacle");
         this.game=-_engine;
-        this.collider.set(Shape.Capsule(268,115))//Shape.Box(268,135));
+        this.collider.set(Shape.Capsule(268,160, new Vector(-5,0)))//Shape.Box(268,135));
         this.body.collisionType=CollisionType.Fixed;
-        this.entrace.collider.set(Shape.Capsule(128,32))
+        this.body.bounciness=1;
+        this.entrace.collider.set(Shape.Capsule(160,32))
         this.entrace.on('precollision', event => this.tryToSell(event))
         this.graphics.use(Resources.Markt.toSprite())
         //this.entrace.graphics.use(Resources.Fish.toSprite());

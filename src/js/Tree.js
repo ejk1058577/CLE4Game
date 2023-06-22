@@ -13,7 +13,8 @@ export class Tree extends Spawner
         super.onInitialize(_engine);
         this.addTag("Obstacle");
         this.graphics.use(Resources.Tree.toSprite())
-        this.collider.set(Shape.Circle(60)); //Shape.Box(112,112));
+        this.collider.set(Shape.Circle(50)); //Shape.Box(112,112));
         this.body.collisionType = CollisionType.Fixed;
+        this.body.bounciness=1;
     }
 }

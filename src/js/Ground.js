@@ -14,7 +14,7 @@ export class Ground extends Actor
     marktAmount = 16;
     constructor() {
         super();
-        Ground.spacing=(160*64)/16;
+        Ground.spacing=(192*64)/16;
     }
     onInitialize(_engine) {
 
@@ -88,9 +88,9 @@ export class Ground extends Actor
                 rot = rotState * Math.PI * 0.5;
                 if (rotState == 1 || rotState == 3) {
                     pos.x = x * Ground.spacing;
-                    pos.y = y * Ground.spacing + 256 + 64;
+                    pos.y = y * Ground.spacing + 256 + 128;
                 } else {
-                    pos.x = x * Ground.spacing + 256 + 64;
+                    pos.x = x * Ground.spacing + 256 + 128;
                     pos.y = y * Ground.spacing;
                 }
                 for (let i = 0;i<this.marktPosList.length;i++)

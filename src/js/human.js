@@ -25,7 +25,7 @@ export class Human extends InventoryActor
     allowMove;
 
     interval=0;
-    static angleSpacing = Math.PI/8;
+    static angleSpacing = Math.PI/12;
     constructor() {
         super();
         this.collided=false;
@@ -51,7 +51,7 @@ export class Human extends InventoryActor
         this.game=_engine;
         this.graphics.use(Resources.Human.toSprite());
 
-        this.collider.set(Shape.Circle(48))
+        this.collider.set(Shape.Circle(40))
         this.body.collisionType = CollisionType.Active;
         this.body.bounciness=1;
         this.body.friction=0;
@@ -88,7 +88,7 @@ export class Human extends InventoryActor
         let effectiveSpeed = Math.max(0,this.speed);
         if(this.allowMove==true) {
             this.speed = this.lerp(this.speed, 80, this.delta)
-            let rayResult = this.TestRay(this, this.vel, 3, 350, Human.angleSpacing, -Human.angleSpacing)
+            let rayResult = this.TestRay(this, this.vel, 3, 500, Human.angleSpacing, -Human.angleSpacing)
             if (rayResult.rayID == -1 || this.interval > 0) {
                 // this.targetAngle=this.angle;
                 if (this.walkTarget == null) {
@@ -108,9 +108,9 @@ export class Human extends InventoryActor
                 }
             //    console.log(Vector.distance(this.pos,rayResult.hitPoint));
                 let turn = 0;
-                if (rayID == 0) {
+                if (rayID ==0) {
                     turn = this.delta * 5;
-                } else if (rayID == 2) {
+                } else if (rayID ==2) {
                     turn = -this.delta * 5;
                 }
                 this.targetAngle += turn;
@@ -135,6 +135,8 @@ export class Human extends InventoryActor
         else
         {
             this.walkTarget=null;
+            this.targetAngle = this.angle-=Math.PI;
+            this.rotation=this.angle;
         }
     }
     lerp(a,b,t)
@@ -174,15 +176,13 @@ export class Human extends InventoryActor
                     point=GameObj.collider.get().rayCast(ray);
                     if(point instanceof Vector && point.x != Infinity)
                     {
+                        let dist = Vector.distance(Caller.pos,point);
+                        if(dist<Vector.distance(Caller.pos,result.hitPoint) && dist<320) {
                             result.rayID = i;
                             result.hitPoint = point;
-                            break;
+                        }
                     }
                 }
-            }
-            if(point instanceof Vector && point.x != Infinity)
-            {
-                break;
             }
         }
         //   console.log(result);
