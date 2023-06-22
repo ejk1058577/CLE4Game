@@ -26,7 +26,7 @@ export class Arrow extends Actor
         let angle = dir.toAngle()
         this.rotation=angle;
         this.pos = new Vector(this.current.pos.x+dir.x*64,this.current.pos.y+dir.y*64);
-        this.vel = this.game.pl.vel;
+        this.vel = this.scene.pl.vel;
     }
 
 }

@@ -27,7 +27,7 @@ const Resources = {
     empty:new ImageSource(empty),
     arrow: new ImageSource(arrow),
     Food: new ImageSource(food),
-    Markt:new ImageSource(markt)
+    Markt:new ImageSource(markt),
     Title: new ImageSource(titleImage)
 }
 
