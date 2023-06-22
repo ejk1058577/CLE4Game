@@ -22,13 +22,13 @@ export class gameScene extends Scene {
         console.log('game scene initd')
     }
 
-    onActivate() {
+    onActivate(_engine) {
         console.log("start")
         this.plInput = new PlayerInput();
         this.add(this.plInput);
 
         //what is this
-        this.query = this.currentScene.world.queryManager.createQuery(["Obstacle"])
+        this.query = this.world.queryManager.createQuery(["Obstacle"])
 
         //ui
         this.ui = new UI();
@@ -40,8 +40,10 @@ export class gameScene extends Scene {
         this.add(this.pl);
         this.playerPos=this.pl.pos;
 
-        _engine.currentScene.camera.strategy.radiusAroundActor(this.pl,64)
-        this.humansSpawner =new HumanSpawner(30); //new Spawner(30,Human,{},new Vector(128*64,128*64),new Vector(0,0));
+        //human spawner optimiz?
+        this.camera.strategy.radiusAroundActor(this.pl,64)
+        this.camera.zoom=1.25;
+        this.humansSpawner =new HumanSpawner(15); //new Spawner(30,Human,{},new Vector(128*64,128*64),new Vector(0,0));
         this.add(this.humansSpawner);
 
         this.nest = new Nest();
