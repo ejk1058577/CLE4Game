@@ -70,7 +70,7 @@ export class Nest extends Actor
                         event.other.DisplayItem();
                         console.log("delivered food")
                         this.score++;
-                        this.game.ui.scoreText.text = this.score.toString();
+                        this.scene.ui.scoreText.text = this.score.toString();
                         this.RequestNewItem(i);
                         break;
                     }
