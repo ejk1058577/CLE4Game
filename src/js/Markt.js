@@ -36,10 +36,11 @@ export class Markt extends Actor
     }
     onInitialize(_engine) {
         super.onInitialize(_engine);
+        this.addTag("Obstacle");
         this.game=-_engine;
-        this.collider.set(Shape.Capsule(268,135, new Vector(-5,0)))//Shape.Box(268,135));
+        this.collider.set(Shape.Capsule(268,115))//Shape.Box(268,135));
         this.body.collisionType=CollisionType.Fixed;
-        this.entrace.collider.set(Shape.Circle(48))
+        this.entrace.collider.set(Shape.Capsule(128,32))
         this.entrace.on('precollision', event => this.tryToSell(event))
         this.graphics.use(Resources.Markt.toSprite())
         //this.entrace.graphics.use(Resources.Fish.toSprite());
@@ -92,13 +93,7 @@ export class Markt extends Actor
     {
         if(event.other instanceof Human)
         {
-            console.log("humanDetected")
-            if(event.other.walkTarget == this.entrace && this.sellingToHuman==null)
-            {
-
-            }
             if(event.other.inventory==0) {
-                console.log("possibleBuyer")
                 this.sellingToHuman = event.other;
                 this.selling = true
             }

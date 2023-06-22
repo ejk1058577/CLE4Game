@@ -1,4 +1,4 @@
-import {Actor, CollisionType, GraphicsGroup, Random, Shape, Vector} from "excalibur";
+import {Actor, CollisionType, GraphicsGroup, Random, Ray, Shape, Vector} from "excalibur";
 import {Resources} from "./resources.js";
 import {Food} from "./food.js";
 import {FoodManager} from "./foodManager.js";
@@ -23,6 +23,9 @@ export class Human extends InventoryActor
 
     collided;
     allowMove;
+
+    interval=0;
+    static angleSpacing = Math.PI/8;
     constructor() {
         super();
         this.collided=false;
@@ -30,6 +33,7 @@ export class Human extends InventoryActor
     }
     onInitialize(_engine) {
         super.onInitialize(_engine);
+        this.addTag("Obstacle");
         this.height=0.4;
         this.useTargetVel=true;
         this.acceleration=20;
@@ -59,6 +63,8 @@ export class Human extends InventoryActor
         this.on("collisionend",event => this.endCollision(event))
 
         this.rotSpeed = 5;
+        this.useRotation=true;
+        this.useTargetVel=true;
        // this.updateTarget();
         //this.on("exitviewport", event => this.kill());
     }
@@ -78,49 +84,40 @@ export class Human extends InventoryActor
         }
     }
     move() {
-        this.speed = this.lerp(this.speed, 80, this.delta)
-        //rotate player
-        let posDir = new Vector(0,0);
-        if (this.lastPos != null && this.collided) {
-            let posDir = new Vector(this.pos.x - this.lastPos.x, this.pos.y - this.lastPos.y).normalize();
-            //console.log(posDir);
-            let dot = posDir.toAngle();
-            this.angle = this.lerp(this.angle, dot, this.delta * 5)
-        } else {
-            this.lastPos = new Vector(0, 0);
-        }
-        let tarDir = new Vector(0,0);
-        if(this.walkTarget!=null)
-        {
-            tarDir = new Vector(this.walkTarget.pos.x - this.pos.x, this.walkTarget.pos.y - this.pos.y).normalize();
-            if(this.collided)
-            {
-                tarDir = new Vector(tarDir.x+posDir.x, tarDir.y+posDir.y).normalize();
+        this.interval = (this.interval+1)%3
+        let effectiveSpeed = Math.max(0,this.speed);
+        if(this.allowMove==true) {
+            this.speed = this.lerp(this.speed, 80, this.delta)
+            let rayResult = this.TestRay(this, this.vel, 3, 350, Human.angleSpacing, -Human.angleSpacing)
+            if (rayResult.rayID == -1 || this.interval > 0) {
+                // this.targetAngle=this.angle;
+                if (this.walkTarget == null) {
+                    this.moveForward(effectiveSpeed)
+                    this.targetAngle = this.lerp(this.targetAngle,MovingActor.getAngleFromDir(this.vel.normalize()),this.delta*0.5);
+                    this.rotation = this.angle;
+                } else {
+                    let targetDir = new Vector(this.walkTarget.pos.x - this.pos.x, this.walkTarget.pos.y - this.pos.y).normalize()
+                    this.targetAngle = this.lerp(this.targetAngle,MovingActor.getAngleFromDir(targetDir),this.delta*0.5);
+                    this.rotation = this.angle;
+                    this.moveForward(effectiveSpeed)
+                }
+            } else {
+                let rayID = rayResult.rayID;
+                if (rayID = 1) {
+                    rayID = (Math.random() > 0.5) ? 0 : 2;
+                }
+            //    console.log(Vector.distance(this.pos,rayResult.hitPoint));
+                let turn = 0;
+                if (rayID == 0) {
+                    turn = this.delta * 5;
+                } else if (rayID == 2) {
+                    turn = -this.delta * 5;
+                }
+                this.targetAngle += turn;
+                this.rotation = this.angle;
+                this.moveForward(effectiveSpeed);
             }
-            this.targetAngle=MovingActor.getAngleFromDir(tarDir);
-            this.useRotation=true;
         }
-        else
-        {
-            this.useRotation=false;
-        }
-        this.angle = this.lerp(this.angle,this.lastAngle,this.delta)
-        this.transform.rotation = this.angle;
-        if(this.walkTarget==null) {
-            this.moveForward(this.speed);
-        }
-        else
-        {
-            this.moveForward(Math.max(this.speed,0))
-            this.targetVel.x += tarDir.x*this.speed/4+posDir.x/2;
-            this.targetVel.y +=tarDir.y*this.speed/4+posDir.y/2;
-            this.targetVel = this.targetVel.normalize();
-            this.targetVel.x *= this.speed;
-            this.targetVel.y *= this.speed;
-        }
-        this.lastPos.x = this.pos.x;
-        this.lastPos.y = this.pos.y;
-        this.lastAngle=this.angle;
 
     }
     _prekill(_scene) {
@@ -138,10 +135,6 @@ export class Human extends InventoryActor
         else
         {
             this.walkTarget=null;
-            let rangle = Math.random()*2*Math.PI;
-            this.lastPos = MovingActor.getDirFromAngle(rangle);
-            this.lastPos.x +=this.pos;
-            this.lastPos.y+=this.pos;
         }
     }
     lerp(a,b,t)
@@ -163,4 +156,37 @@ export class Human extends InventoryActor
             this.collided=false;
         }
     }
+
+    TestRay(Caller, Direction, Rays, maxDistance, raySpacing, startOffset)
+    {
+        let point=null;
+        let result={rayID:-1,hitPoint:new Vector(Infinity,Infinity)};
+        for(const index in this.game.Obstacles)
+        {
+            let GameObj = this.game.Obstacles[index]
+            if(Vector.distance(GameObj.pos,Caller.pos)<=maxDistance)
+            {
+                let rayAngle=MovingActor.getAngleFromDir(Direction)+startOffset;
+                for(let i =0;i<Rays;i++)
+                {
+                    let rayDir = MovingActor.getDirFromAngle(rayAngle+i*raySpacing);
+                    let ray = new Ray(Caller.pos,rayDir);
+                    point=GameObj.collider.get().rayCast(ray);
+                    if(point instanceof Vector && point.x != Infinity)
+                    {
+                            result.rayID = i;
+                            result.hitPoint = point;
+                            break;
+                    }
+                }
+            }
+            if(point instanceof Vector && point.x != Infinity)
+            {
+                break;
+            }
+        }
+        //   console.log(result);
+        return result;
+    }
+
 }
