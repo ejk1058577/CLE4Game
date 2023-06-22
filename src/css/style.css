@@ -3,3 +3,67 @@ body {
     padding:0;
     background-color:darkgray;
 }
+
+
+#root {
+    /* When this is relative, child elements positioned absolutely will
+       be relative to this element, not the document providing more accurate
+       positioning, since the canvas will be at (0, 0) */
+    position: relative;
+}
+
+#root #ui {
+    /* This will make the UI appear on top of the canvas */
+    /* TODO: Remember to change resolution to adjust for game */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 800px;
+    height: 600px;
+    font-family: VT323;
+}
+
+#root #ui input {
+    font-family: VT323;
+}
+
+#root #ui button {
+    font-family: VT323;
+}
+
+  /* These are scene-based UI styles */
+#ui .button {
+    background-color: darkgray;
+    color: white;
+    width: 8em;
+    font-size: 1.5em;
+    border-radius: 4px;
+}
+
+#ui.mainmenu .input {
+    background-color: darkgray;
+    color: white;
+    width: 7.7em;
+    font-size: 1.5em;
+    border-radius: 4px;
+}
+
+#ui .wrapper {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    align-items: center;
+}
+
+#ui .wrapper-hz {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#ui.mainmenu .wrapper img {
+    margin: 5em 0;
+}

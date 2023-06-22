@@ -4,8 +4,21 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Excalibur</title>
+    <link href='https://fonts.googleapis.com/css?family=VT323' rel='stylesheet'>
+    <link rel="stylesheet" href="./src/css/style.css">
   </head>
   <body>
+    <!-- Define a wrapping element, in case you want to customize positions -->
+    <div id="root">
+      <!-- Provide your own canvas to Excalibur -->
+      <canvas id="game"></canvas>
+
+      <!-- The UI will automatically be drawn above the game due to z-indexing -->
+      <div id="ui">
+        <!-- This is where your game UI will go, dynamically created per scene -->
+      </div>
+    </div>
+
     <script type="module" src="/src/js/game.js"></script>
   </body>
 </html>

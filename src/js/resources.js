@@ -12,6 +12,7 @@ import empty from '../images/empty.png'
 import arrow from '../images/arrow.png'
 import food from '../images/Food.png'
 import markt from '../images/markt.png'
+import titleImage from '../images/loadingscreen.png'
 
 const Resources = {
     Fish: new ImageSource(fishImage),
@@ -27,6 +28,7 @@ const Resources = {
     arrow: new ImageSource(arrow),
     Food: new ImageSource(food),
     Markt:new ImageSource(markt)
+    Title: new ImageSource(titleImage)
 }
 
 const resourceArray = []
@@ -34,5 +36,6 @@ for (const key in Resources) {
     resourceArray.push(Resources[key])
 }
 const ResourceLoader = new Loader(resourceArray)
+ResourceLoader.logo = titleImage
 
 export { Resources, ResourceLoader }

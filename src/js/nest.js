@@ -1,12 +1,16 @@
-import {Actor, Random, Shape, Vector} from "excalibur";
+import {Actor, Engine, Random, Shape, Vector} from "excalibur";
 import {Resources} from "./resources.js";
 import {player} from "./player.js";
 import {FoodManager} from "./foodManager.js";
 import {Ground} from "./Ground.js";
+import { UI } from "./UI.js";
+
+import { gameoverScene } from "./gameoverScene.js";
 
 export class Nest extends Actor
 {
-    game
+    scene;
+    game;
     requestedItems;
     timers;
     score;
@@ -21,6 +25,8 @@ export class Nest extends Actor
         super.onInitialize(_engine);
 
         this.game = _engine;
+        this.scene = this.game.currentScene;
+        this.UI = new UI();
         this.rng = new Random();
         this.requestedItems=[-1,-1,-1];
         this.timers = [1,1,1];
@@ -35,14 +41,17 @@ export class Nest extends Actor
     onPreUpdate(_engine, _delta){
         super.onPreUpdate(_engine, _delta);
         this.timers[0]-=(_delta/1000)/this.deliveryTime;
-        this.game.ui.updTimebar(this.timers[0]);
+        this.scene.ui.updTimebar(this.timers[0]);
+        if(this.deliveryTime <= 0) {
+            _engine.goToScene('gameoverScene')
+        }
     }
 
     RequestNewItem(slot)
     {
         this.requestedItems[slot]= this.rng.integer(FoodManager.minId,FoodManager.maxID)
         console.log(this.requestedItems[slot]);
-        this.game.ui.changeRequestDisplay(this.requestedItems[slot]);
+        this.scene.ui.changeRequestDisplay(this.requestedItems[slot]);
         //console.log(this.game.ui.requestItem);
     }
 

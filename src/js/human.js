@@ -67,7 +67,7 @@ export class Human extends InventoryActor
         if(this.allowMove) {
             this.move();
         }
-        if(Vector.distance(this.pos,this.game.playerPos)>1400)
+        if(Vector.distance(this.pos,this.scene.playerPos)>1400)
         {
             this.kill();
         }

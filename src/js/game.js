@@ -1,5 +1,5 @@
 import '../css/style.css'
-import { Actor, Engine, Vector, Shape, Text,Font,Color} from "excalibur"
+import { Actor, Engine, Vector, Shape, Text,Font,Color, Input} from "excalibur"
 import { Resources, ResourceLoader } from './resources.js'
 import {player} from "./player.js";
 import {Food} from "./food.js"
@@ -13,8 +13,9 @@ import {UI} from "./UI.js";
 import {Arrow} from "./Arrow.js";
 import { Arcade } from "arcade-game"
 import {PlayerInput} from "./playerInput.js";
-import {Markt} from "./Markt.js";
-
+import { gameScene } from './gameScene.js'
+import { menuScene } from './menuScene.js';
+import { gameoverScene } from './gameoverScene.js';
 import { Highscore } from './highscore';
 
 export class Game extends Engine {
@@ -24,26 +25,35 @@ export class Game extends Engine {
     plInput;
     pl;
     nest;
-    ui;
 
     humanSpawner;
     #arcade;
     #joyStickListener;
 
-    constructor() {
-        super({ width: window.innerWidth-5, height: window.innerHeight-1})
+    username;
+
+    constructor(options) {
+        super(options)
         this.start(ResourceLoader).then(() => this.startGame())
+        this.username = 'Guest';
     }
 
     startGame() {
         document.addEventListener("keydown", this.preventSpace)
-        console.log("start")
-        this.plInput = new PlayerInput();
-        this.add(this.plInput);
-        //ui
-        this.ui = new UI();
-        this.ui.z = 1000;
-        this.add(this.ui);
+        this.add('gameScene', new gameScene())   
+        this.add('menuScene', new menuScene(this))
+        this.add('gameoverScene', new gameoverScene())
+
+        this.goToScene('menuScene')
+        // this.goToScene('gameScene')
+
+        // console.log("start")
+        // this.plInput = new PlayerInput();
+        // this.add(this.plInput);
+        // //ui
+        // this.ui = new UI();
+        // this.ui.z = 1000;
+        // this.add(this.ui);
 
         //#arcade controls
         console.log("loading #arcade controls");
@@ -53,26 +63,28 @@ export class Game extends Engine {
         //setTimeout(this.#joyStickListener, 5000); used this for debugging.
         this.add(new Ground())
 
-        this.pl = new player();
-        this.pl.pos=new Vector(3*Ground.spacing,3*Ground.spacing)
-        this.add(this.pl);
-        this.playerPos=this.pl.pos;
+        // this.pl = new player();
+        // this.pl.pos=new Vector(32*128,32*128)
+        // this.add(this.pl);
+        // this.playerPos=this.pl.pos;
 
-        this.currentScene.camera.strategy.radiusAroundActor(this.pl,64)
-        this.currentScene.camera.zoom=1.25;
-        this.humansSpawner =new HumanSpawner(15); //new Spawner(30,Human,{},new Vector(128*64,128*64),new Vector(0,0));
-        this.add(this.humansSpawner);
+        // this.currentScene.camera.strategy.radiusAroundActor(this.pl,64)
+        // this.humansSpawner =new HumanSpawner(30); //new Spawner(30,Human,{},new Vector(128*64,128*64),new Vector(0,0));
+        // this.add(this.humansSpawner);
 
-        this.nest = new Nest();
-        this.add(this.nest);
+        // this.nest = new Nest();
+        // this.add(this.nest);
+        // this.add(new Ground())
 
-        this.add(new Arrow(this.pl,this.nest))
-  //      this.showDebug(true);
-    //    this.debug.transform.showAll=true;
+        // this.add(new Arrow(this.pl,this.nest))
+
+        // this.add('menuScene', new menuScene())
+        // this.add('gameoverScene', new gameoverScene())
     }
+
     onPostUpdate(_engine, _delta) {
         super.onPostUpdate(_engine, _delta);
-        this.playerPos = this.pl.pos;
+        //this.playerPos = this.pl.pos;
     }
 
     preventSpace(e)
@@ -101,5 +113,17 @@ export class Game extends Engine {
     }
 }
 
-
-new Game()
+// Create our game
+const game = new Game({
+    /**
+     * Specify our custom canvas element so Excalibur doesn't make one
+     */
+    canvasElementId: 'game',
+    /**
+     * Specify pointer scope to ensure that excalibur won't capture the mouse input
+     * meant to be captured by HTML GUI
+     */
+    pointerScope: Input.PointerScope.Canvas,
+    width: 800, 
+    height: 600
+  })
