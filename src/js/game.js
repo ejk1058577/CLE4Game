@@ -9,7 +9,6 @@ import { gameoverScene } from './gameoverScene.js';
 
 export class Game extends Engine {
 
-    Obstacles;
     playerPos;
 
     plInput;
@@ -17,8 +16,6 @@ export class Game extends Engine {
     nest;
 
     humanSpawner;
-
-    query;
     #arcade;
     #joyStickListener;
 
@@ -31,7 +28,6 @@ export class Game extends Engine {
     }
 
     startGame() {
-        this.query = this.currentScene.world.queryManager.createQuery(["Obstacle"])
         document.addEventListener("keydown", this.preventSpace)
         this.add('gameScene', new gameScene())   
         this.add('menuScene', new menuScene(this))
@@ -52,6 +48,7 @@ export class Game extends Engine {
         super.onPostUpdate(_engine, _delta);
         //this.playerPos = this.pl.pos;
     }
+
     preventSpace(e)
     {
         e.preventDefault();
