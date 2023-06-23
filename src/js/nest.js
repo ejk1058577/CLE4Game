@@ -15,7 +15,7 @@ export class Nest extends Actor
     timers;
     score;
     rng
-    deliveryTime=5
+    deliveryTime=30
     constructor() {
         super();
         this.pos=new Vector(3*Ground.spacing,3*Ground.spacing)
