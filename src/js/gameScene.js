@@ -1,5 +1,4 @@
-import { Scene, Actor, Engine, Vector, Shape, Text,Font,Color} from "excalibur"
-import { Resources, ResourceLoader } from './resources.js'
+import { Scene, Vector} from "excalibur"
 import { player } from "./player.js";
 
 import { HumanSpawner } from "./humanSpawner.js";
@@ -19,9 +18,16 @@ export class gameScene extends Scene {
     humanSpawner;
 
     onInitialize(_engine) {
+        console.log('game scene initd')
+    }
+
+    onActivate(_engine) {
         console.log("start")
         this.plInput = new PlayerInput();
         this.add(this.plInput);
+
+        //what is this
+        this.query = this.world.queryManager.createQuery(["Obstacle"])
 
         //ui
         this.ui = new UI();
@@ -29,12 +35,14 @@ export class gameScene extends Scene {
         this.add(this.ui);
 
         this.pl = new player();
-        this.pl.pos=new Vector(32*128,32*128)
+        this.pl.pos=new Vector(3*Ground.spacing,3*Ground.spacing)
         this.add(this.pl);
         this.playerPos=this.pl.pos;
 
-        _engine.currentScene.camera.strategy.radiusAroundActor(this.pl,64)
-        this.humansSpawner =new HumanSpawner(30); //new Spawner(30,Human,{},new Vector(128*64,128*64),new Vector(0,0));
+        //human spawner optimiz?
+        this.camera.strategy.radiusAroundActor(this.pl,64)
+        this.camera.zoom=1.25;
+        this.humansSpawner =new HumanSpawner(15); //new Spawner(30,Human,{},new Vector(128*64,128*64),new Vector(0,0));
         this.add(this.humansSpawner);
 
         this.nest = new Nest();
@@ -42,5 +50,12 @@ export class gameScene extends Scene {
         this.add(new Ground())
 
         this.add(new Arrow(this.pl,this.nest))
+    }
+
+    onPostUpdate(_engine, _delta) {
+        super.onPostUpdate(_engine, _delta);
+        this.playerPos = this.pl.pos;
+        this.Obstacles = this.query.getEntities();
+       // console.log(ObstacleFinder.Objects);
     }
 }
