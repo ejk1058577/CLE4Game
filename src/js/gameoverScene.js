@@ -31,6 +31,10 @@ export class gameoverScene extends Scene {
         let disconnectedMessage = document.createElement('p');
         disconnectedMessage.innerHTML = `Couldn't retrieve highscores from servers.`;
 
+        //header with player's score
+        let scoreHeader = document.createElement('h1');
+        scoreHeader.innerHTML = `Your score: 0`; //TODO load actual score
+
         //TODO maybe replace this with a table
         //score list
         let scoreList = document.createElement('ol');
@@ -78,6 +82,7 @@ export class gameoverScene extends Scene {
         wrapper.appendChild(wrapperBtn);
         wrapperBtn.appendChild(btnAgain);
         wrapperBtn.appendChild(btnMenu);
+        container.appendChild(scoreHeader);
 
         if (this.game.highscore.connected) {
             container.appendChild(scoreList);

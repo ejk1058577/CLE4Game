@@ -80,6 +80,11 @@ body {
     font-size: 1.2em;
 }
 
+#ui.gameover h1 {
+    font-size: 1.5em;
+    text-align: center;
+}
+
 #ui.mainmenu .wrapper img {
     margin: 5em 0;
 }
