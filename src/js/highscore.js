@@ -20,6 +20,7 @@ export class Highscore {
         return new Promise(async (res, rej) => {
             let scores = await this.requestScores().catch((e) => {
                 rej(e);
+                return;
             });
             this.scores = scores;
 
@@ -37,12 +38,14 @@ export class Highscore {
             let response;
             response = await fetch(`${this.baseUrl}?key=${this.key}`).catch((e) => {
                 rej(e);
+                return;
             });
 
             if (response.ok) {
                 this.connected = true;
                 let json = await response.json();
                 res(json);
+                return;
             }
             
             this.connected = false;
