@@ -46,7 +46,9 @@ export class Game extends Engine {
     }
     preventSpace(e)
     {
-        e.preventDefault();
+        if(e.keyCode==32) {
+            e.preventDefault();
+        }
     }
     //sample function for debug
     #joyStickFound(e)
@@ -81,6 +83,6 @@ const game = new Game({
      * meant to be captured by HTML GUI
      */
     pointerScope: Input.PointerScope.Canvas,
-    width: 800, 
-    height: 600
+    width: window.innerWidth-5,
+    height: window.innerHeight-5
   })

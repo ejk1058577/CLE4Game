@@ -17,6 +17,8 @@ export class Markt extends Actor
     sellingToHuman;
     selling
     entrace;
+
+    height = 0.6;
     constructor(sellID,pos,rot)
     {
         super();

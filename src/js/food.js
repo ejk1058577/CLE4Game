@@ -4,6 +4,8 @@ import {fallingObject} from "./fallingObject.js";
 import {Human} from "./human.js";
 import {FoodManager} from "./foodManager.js";
 import {MovingActor} from "./MovingActor.js";
+import {Markt} from "./Markt.js";
+import {Tree} from "./Tree.js";
 export class Food extends MovingActor{
     foodId;
     spawner;
@@ -14,6 +16,7 @@ export class Food extends MovingActor{
     constructor(data) {
         super();
         this.foodId = data.id;
+        this.height = data.startHeight;
         this.useHeight=true;
         this.minScale=new Vector(0.4,0.4)
         this.maxScale=new Vector(0.75,0.75)
@@ -33,8 +36,21 @@ export class Food extends MovingActor{
         this.graphics.use(sprite);
         this.z = 0;
         this.scale=this.minScale;
+        this.on("collisionstart",event =>this.artificialCollision(event))
     }
 
+    artificialCollision(event)
+    {
+        if(event.other instanceof Markt || event.other instanceof Tree)
+        {
+            this.useTargetVel=false;
+            this.vel=new Vector(0,0);
+            if(this.height>event.other.height)
+            {
+                this.minHeight=event.other.height;
+            }
+        }
+    }
     onPreUpdate(_engine, _delta) {
         super.onPreUpdate(_engine, _delta);
 
@@ -42,6 +58,7 @@ export class Food extends MovingActor{
         {
             this.fall(_delta / 1000);
         }
+        this.z = Math.round(9*this.height);
     }
 
     pickup(player) {
@@ -64,7 +81,7 @@ export class Food extends MovingActor{
                 this.on("precollision", event => this.humanDropItem(event))
             }
         }
-        if(this.height<=0.05)
+        if(this.height<=0.05+this.minHeight)
         {
             this.isFalling=false;
             if(this.fallDestroy)
