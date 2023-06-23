@@ -5,6 +5,7 @@ import { Food } from "./food.js";
 import {FoodManager} from "./foodManager.js";
 import {PlayerInput} from "./playerInput.js";
 import {InventoryActor} from "./InventoryActor.js";
+import {MovingActor} from "./MovingActor.js";
 export class player extends InventoryActor {
     //Refernce to engine
     game
@@ -34,7 +35,7 @@ export class player extends InventoryActor {
         super.onInitialize(_engine);
         this.z = 5;
         this.acceleration = 50;
-        this.useTargetVel = true;
+       // this.useTargetVel = true;
         this.displayAngle = 0;
         this.displayDistance = 25;
         this.Display.minScale = new Vector(0.4, .4);
@@ -86,7 +87,11 @@ export class player extends InventoryActor {
         //rotate player
         this.transform.rotation = this.angle;
         //recalculate forward velocity of the player
-        this.moveForward(this.speed);
+        let dir = MovingActor.getDirFromAngle(this.angle);
+        dir.x*=this.speed;
+        dir.y*=this.speed;
+        this.vel=dir;
+        //this.moveForward(this.speed);
         //this.displayItem.pos=new Vector(this.pos.x,this.pos.y);
     }
 
