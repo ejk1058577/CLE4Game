@@ -64,6 +64,7 @@ export class gameScene extends Scene {
             }
             this.nest.timers[0]=1;
             this.nest.RequestNewItem(0);
+            this.game.score=0;
             this.nest.score=0;
             this.ui.scoreText.text="0";
             this.pl.pos=new Vector(3*Ground.spacing,3*Ground.spacing)
@@ -74,6 +75,6 @@ export class gameScene extends Scene {
         super.onPostUpdate(_engine, _delta);
         this.playerPos = this.pl.pos;
         this.Obstacles = this.query.getEntities();
-       // console.log(ObstacleFinder.Objects);
+        //console.log(ObstacleFinder.Objects);
     }
 }

@@ -33,7 +33,7 @@ export class gameoverScene extends Scene {
 
         //header with player's score
         let scoreHeader = document.createElement('h1');
-        scoreHeader.innerHTML = `Your score: 0`; //TODO load actual score
+        scoreHeader.innerHTML = `Your score: ${this.game.score}`; //TODO load actual score
 
         //TODO maybe replace this with a table
         //score list

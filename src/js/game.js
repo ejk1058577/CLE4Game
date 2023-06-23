@@ -10,6 +10,7 @@ import { Highscore } from './highscore';
 
 export class Game extends Engine {
 
+    score
     playerPos;
 
     plInput;
