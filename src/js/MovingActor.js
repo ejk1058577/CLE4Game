@@ -6,6 +6,8 @@ export class MovingActor extends Actor
     maxScale
     minScale
     height
+
+    minHeight
     gravity;
 
     useTargetVel
@@ -25,6 +27,7 @@ export class MovingActor extends Actor
         this.minScale=new Vector(0,0);
         this.maxScale=new Vector(1,1);
         this.height = 1;
+        this.minHeight=0
 
         this.useTargetVel=false;
         this.targetVel=new Vector(0,0);
@@ -53,7 +56,7 @@ export class MovingActor extends Actor
     scaleObject()
     {
         this.scale=new Vector(this.lerp(this.minScale.x,this.maxScale.x,this.height),this.lerp(this.minScale.x,this.maxScale.x,this.height));
-        this.height=Math.max(0,this.height-this.gravity*this.delta);
+        this.height=Math.max(this.minHeight,this.height-this.gravity*this.delta);
     }
     accelerateObject()
     {

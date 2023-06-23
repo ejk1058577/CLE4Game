@@ -14,10 +14,11 @@ export class Food extends MovingActor{
     constructor(data) {
         super();
         this.foodId = data.id;
+        this.height = data.startHeight;
+        this.minHeight=data.minHeight;
         this.useHeight=true;
         this.minScale=new Vector(0.4,0.4)
         this.maxScale=new Vector(0.75,0.75)
-        this.height=0;
         this.gravity=1;
         this.isFalling = false;
     }
@@ -32,7 +33,9 @@ export class Food extends MovingActor{
         let sprite = FoodManager.GetFoodData(this.foodId);
         this.graphics.use(sprite);
         this.z = 0;
-        this.scale=this.minScale;
+        this.scale=new Vector(0.6,0.6);
+        this.on("collisionstart",event =>this.artificialCollision(event))
+
     }
 
     onPreUpdate(_engine, _delta) {
@@ -42,6 +45,8 @@ export class Food extends MovingActor{
         {
             this.fall(_delta / 1000);
         }
+      //  console.log(this.height);
+        this.z = Math.round(9*this.height);
     }
 
     pickup(player) {
@@ -64,7 +69,7 @@ export class Food extends MovingActor{
                 this.on("precollision", event => this.humanDropItem(event))
             }
         }
-        if(this.height<=0.05)
+        if(this.height<=0.05+this.minHeight)
         {
             this.isFalling=false;
             if(this.fallDestroy)

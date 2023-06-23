@@ -12,6 +12,8 @@ export class Ground extends Actor
     static marktList = []
     marktPosList=[]
     marktAmount = 16;
+
+    treelist = [];
     constructor() {
         super();
         Ground.spacing=(160*64)/16;
@@ -65,6 +67,7 @@ export class Ground extends Actor
                 let tree = new Tree(treePos);
                // tree.pos=treePos;
                 this.scene.add(tree);
+                this.treelist.push(tree);
             }
         }
     }
@@ -109,6 +112,19 @@ export class Ground extends Actor
             this.scene.add(mark)
             this.marktPosList.push(pos);
             Ground.marktList.push(mark);
+        }
+    }
+    _prekill(_scene) {
+        super._prekill(_scene);
+        this.tileMap.kill();
+        for(let i = 0;i<Ground.marktList.length;i++)
+        {
+            Ground.marktList[i].kill();
+        }
+        Ground.marktList=[];
+        for(let i=0;i<this.treelist.length;i++)
+        {
+            this.treelist[i].kill();
         }
     }
 }
