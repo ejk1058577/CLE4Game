@@ -54,6 +54,18 @@ export class Food extends MovingActor{
         }
     }
 
+    artificialCollision(event)
+    {
+        if(event.other instanceof Markt || event.other instanceof Tree)
+        {
+            this.useTargetVel=false;
+            this.vel=new Vector(0,0);
+            if(this.height>event.other.height)
+            {
+                this.minHeight=event.other.height;
+            }
+        }
+    }
     onPreUpdate(_engine, _delta) {
         super.onPreUpdate(_engine, _delta);
 
@@ -61,7 +73,6 @@ export class Food extends MovingActor{
         {
             this.fall(_delta / 1000);
         }
-      //  console.log(this.height);
         this.z = Math.round(9*this.height);
     }
 

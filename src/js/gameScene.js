@@ -14,6 +14,7 @@ import {Markt} from "./Markt.js";
 
 export class gameScene extends Scene {
     title = null;
+    game
     playerPos;
     plInput;
     pl;
@@ -79,6 +80,5 @@ export class gameScene extends Scene {
         super.onPostUpdate(_engine, _delta);
         this.playerPos = this.pl.pos;
         this.Obstacles = this.query.getEntities();
-        //console.log(ObstacleFinder.Objects);
     }
 }

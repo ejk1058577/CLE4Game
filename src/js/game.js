@@ -33,7 +33,7 @@ export class Game extends Engine {
 
     startGame() {
         document.addEventListener("keydown", this.preventSpace)
-        this.add('gameScene', new gameScene())   
+        this.add('gameScene', new gameScene())
         this.add('menuScene', new menuScene(this))
         this.add('gameoverScene', new gameoverScene(this))
 

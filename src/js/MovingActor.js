@@ -6,7 +6,6 @@ export class MovingActor extends Actor
     maxScale
     minScale
     height
-
     minHeight
     gravity;
 
@@ -20,6 +19,7 @@ export class MovingActor extends Actor
     rotSpeed;
 
     delta;
+
     constructor() {
         super();
         this.useHeight=false;
