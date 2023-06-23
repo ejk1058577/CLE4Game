@@ -1,5 +1,4 @@
-import { Scene, Actor, Engine, Vector, Shape, Text,Font,Color} from "excalibur"
-import { Resources, ResourceLoader } from './resources.js'
+import { Scene, Vector} from "excalibur"
 import { player } from "./player.js";
 
 import { HumanSpawner } from "./humanSpawner.js";

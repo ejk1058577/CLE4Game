@@ -1,22 +1,11 @@
 import '../css/style.css'
-import { Actor, Engine, Vector, Shape, Text,Font,Color, Input} from "excalibur"
-import { Resources, ResourceLoader } from './resources.js'
-import {player} from "./player.js";
-import {Food} from "./food.js"
-
-import {Spawner} from "./spawner.js";
-import {HumanSpawner} from "./humanSpawner.js";
-import {Human} from "./human.js";
-import {Nest} from "./nest.js";
+import { Engine, Input} from "excalibur"
+import { ResourceLoader } from './resources.js'
 import {Ground} from "./Ground.js";
-import {UI} from "./UI.js";
-import {Arrow} from "./Arrow.js";
 import { Arcade } from "arcade-game"
-import {PlayerInput} from "./playerInput.js";
 import { gameScene } from './gameScene.js'
 import { menuScene } from './menuScene.js';
 import { gameoverScene } from './gameoverScene.js';
-import { Highscore } from './highscore';
 
 export class Game extends Engine {
 
@@ -45,15 +34,6 @@ export class Game extends Engine {
         this.add('gameoverScene', new gameoverScene())
 
         this.goToScene('menuScene')
-        // this.goToScene('gameScene')
-
-        // console.log("start")
-        // this.plInput = new PlayerInput();
-        // this.add(this.plInput);
-        // //ui
-        // this.ui = new UI();
-        // this.ui.z = 1000;
-        // this.add(this.ui);
 
         //#arcade controls
         console.log("loading #arcade controls");
@@ -62,24 +42,6 @@ export class Game extends Engine {
         document.addEventListener("joystickcreated",  this.#joyStickListener); //this listener does not work.
         //setTimeout(this.#joyStickListener, 5000); used this for debugging.
         this.add(new Ground())
-
-        // this.pl = new player();
-        // this.pl.pos=new Vector(32*128,32*128)
-        // this.add(this.pl);
-        // this.playerPos=this.pl.pos;
-
-        // this.currentScene.camera.strategy.radiusAroundActor(this.pl,64)
-        // this.humansSpawner =new HumanSpawner(30); //new Spawner(30,Human,{},new Vector(128*64,128*64),new Vector(0,0));
-        // this.add(this.humansSpawner);
-
-        // this.nest = new Nest();
-        // this.add(this.nest);
-        // this.add(new Ground())
-
-        // this.add(new Arrow(this.pl,this.nest))
-
-        // this.add('menuScene', new menuScene())
-        // this.add('gameoverScene', new gameoverScene())
     }
 
     onPostUpdate(_engine, _delta) {
