@@ -70,11 +70,41 @@ export class gameoverScene extends Scene {
         if (this.game.highscore.connected) {
             //TODO check and insert player's score into this
             let scores = this.game.highscore.scores;
-            for (let entry of scores) {
+            let last = scores[scores.length - 1].score;
+            let index = -1;
+
+            if (this.game.score > last) {
+                console.log('POSITIVE');
+
+
+                this.game.highscore.sendScore(this.game.username, this.game.score);
+
+                let scoresArr = scores.map(v => v.score);
+
+                    let sc = this.game.score;
+                    for (let i = 0; i < scoresArr.length; i++) {
+                        if (sc > scoresArr[i]) {
+                            scores.splice(i, 0, {name: this.game.username, score : this.game.score}).slice(1);
+                            index = i;
+                            break;
+                        }
+                    }   
+            } else if (scores.length < 50) {
+                this.game.highscore.sendScore(this.game.username, this.game.score).then((score) => {
+                    
+                });
+                scores.push({name: this.game.username, score : this.game.score});
+                index = scores.length - 1;
+            }
+
+            scores.forEach( (entry, i) => {
                 let li = document.createElement('li');
                 li.innerHTML = `${entry.name}:     ${entry.score}`;
+                if (index >= 0 && i == index) {
+                    li.style.color = 'yellow';
+                }
                 scoreList.appendChild(li);
-            }
+            });
         }
 
         //add elemts to stuff
@@ -97,5 +127,6 @@ export class gameoverScene extends Scene {
         // Ensure we cleanup the DOM and remove any children when transitioning scenes
         this.menuUI.classList.remove('gameover');
         this.menuUI.innerHTML = ''
+        this.game.highscore.loadScores();
     }
 }
