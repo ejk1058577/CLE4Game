@@ -4,6 +4,9 @@ import {fallingObject} from "./fallingObject.js";
 import {Human} from "./human.js";
 import {FoodManager} from "./foodManager.js";
 import {MovingActor} from "./MovingActor.js";
+import {Tree} from "./Tree.js";
+import {Markt} from "./Markt.js";
+
 export class Food extends MovingActor{
     foodId;
     spawner;
@@ -36,6 +39,19 @@ export class Food extends MovingActor{
         this.scale=new Vector(0.6,0.6);
         this.on("collisionstart",event =>this.artificialCollision(event))
 
+    }
+    t
+    artificialCollision(event)
+    {
+        if(event.other instanceof Tree || event.other instanceof Markt)
+        {
+            this.useTargetVel=false;
+            this.vel=new Vector(0,0);
+            if(this.height>event.other.height)
+            {
+                this.minHeight=event.other.height;
+            }
+        }
     }
 
     onPreUpdate(_engine, _delta) {
