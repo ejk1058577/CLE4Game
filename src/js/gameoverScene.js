@@ -21,15 +21,65 @@ export class gameoverScene extends Scene {
         //wrapper div
         let wrapper = document.createElement('div');
 
+        //wrapper for buttons
+        let wrapperBtn = document.createElement('div');
+
         //container for scores and stuff
         let container = document.createElement('div');
 
         //message if not connected
-        let connectedMessage = document.createElement('p');
+        let disconnectedMessage = document.createElement('p');
+        disconnectedMessage.innerHTML = `Couldn't retrieve highscores from servers.`;
 
+        //TODO maybe replace this with a table
         //score list
         let scoreList = document.createElement('ol');
-        
+
+        //buttons
+        let btnAgain = document.createElement('button');
+        let btnMenu = document.createElement('button');
+
+        //click events
+        btnAgain.onclick = ((e) => {
+            e.preventDefault();
+
+            //TODO reset gameScene? && score?
+            this.game.goToScene('gameScene');
+        });
+
+        btnMenu.onclick = ((e) => {
+            e.preventDefault();
+
+            this.game.goToScene('menuScene');
+        })
+
+        //styling
+
+
+        //if there's highscores make li-s and add them to ol
+        if (this.game.highscore.connected) {
+            //TODO check and insert player's score into this
+            let scores = this.game.highscore.scores;
+            for (let entry of scores) {
+                let li = document.createElement('li');
+                li.innerHTML = `${entry.name}:     ${entry.score}`;
+                scoreList.appendChild(li);
+            }
+        }
+
+        //add elemts to stuff
+        wrapper.appendChild(container);
+        wrapper.appendChild(wrapperBtn);
+        wrapperBtn.appendChild(btnAgain);
+        wrapperBtn.appendChild(btnMenu);
+
+        if (this.game.highscore.connected) {
+            container.appendChild(scoreList);
+        } else {
+            container.appendChild(disconnectedMessage);
+        }
+
+        this.menuUI.appendChild(wrapper);
     }
 
     onDeactivate() {
