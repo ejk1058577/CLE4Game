@@ -37,7 +37,9 @@ export class gameoverScene extends Scene {
 
         //buttons
         let btnAgain = document.createElement('button');
+        btnAgain.innerHTML = 'Play again'
         let btnMenu = document.createElement('button');
+        btnMenu.innerHTML = 'Back to Main menu'
 
         //click events
         btnAgain.onclick = ((e) => {
@@ -54,7 +56,11 @@ export class gameoverScene extends Scene {
         })
 
         //styling
-
+        wrapper.className = 'wrapper';
+        wrapperBtn.className = 'wrapper-hz';
+        container.className = 'container';
+        btnAgain.className = 'button';
+        btnMenu.className = btnAgain.className;
 
         //if there's highscores make li-s and add them to ol
         if (this.game.highscore.connected) {
@@ -86,5 +92,5 @@ export class gameoverScene extends Scene {
         // Ensure we cleanup the DOM and remove any children when transitioning scenes
         this.menuUI.classList.remove('gameover');
         this.menuUI.innerHTML = ''
-      }
+    }
 }

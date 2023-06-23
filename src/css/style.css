@@ -31,19 +31,10 @@ body {
     font-family: VT323;
 }
 
-  /* These are scene-based UI styles */
 #ui .button {
     background-color: darkgray;
     color: white;
     width: 8em;
-    font-size: 1.5em;
-    border-radius: 4px;
-}
-
-#ui.mainmenu .input {
-    background-color: darkgray;
-    color: white;
-    width: 7.7em;
     font-size: 1.5em;
     border-radius: 4px;
 }
@@ -57,11 +48,36 @@ body {
 }
 
 #ui .wrapper-hz {
-    margin: 0 auto;
+    width: 50%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+}
+
+#ui .container {
+    width: 50%;
+    background-color: darkgrey;
+    color: white;
+    padding: 0.5em;
+    margin: 0.5em;
+    border-style: outset;
+    border-color: buttonborder;
+    border-image: initial;
+    border-radius: 4px;
+}
+
+  /* These are scene-based UI styles */
+
+#ui.mainmenu .input {
+    background-color: darkgray;
+    color: white;
+    width: 7.7em;
+    font-size: 1.5em;
+    border-radius: 4px;
+}
+
+#ui.gameover .container {
+    font-size: 1.2em;
 }
 
 #ui.mainmenu .wrapper img {
