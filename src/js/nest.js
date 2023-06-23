@@ -36,7 +36,7 @@ export class Nest extends Actor
         this.graphics.use(Resources.Nest.toSprite())
         this.collider.set(Shape.Circle(50))
         this.on("collisionstart",event => this.CheckFoodItems(event))
-        this.z = 1;
+        this.z = 9;
     }
     onPreUpdate(_engine, _delta){
         super.onPreUpdate(_engine, _delta);

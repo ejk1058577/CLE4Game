@@ -17,6 +17,11 @@ export class Markt extends Actor
     sellingToHuman;
     selling
     entrace;
+<<<<<<< Updated upstream
+=======
+    displayItem;
+    height = 0.6;
+>>>>>>> Stashed changes
     constructor(sellID,pos,rot)
     {
         super();
@@ -46,13 +51,13 @@ export class Markt extends Actor
         this.scene.add(this.entrace);
         this.z=2;
 
-        let displayItem = new Actor();
-        displayItem.pos = this.pos
-        console.log(displayItem.pos);
-        displayItem.z = 4;
-        displayItem.graphics.use(FoodManager.GetFoodData(this.sellID));
-        displayItem.rotation=this.rotation;
-        this.scene.add(displayItem);
+        this.displayItem = new Actor();
+        this.displayItem.pos = this.pos
+     //   console.log(displayItem.pos);
+        this.displayItem.z = 4;
+        this.displayItem.graphics.use(FoodManager.GetFoodData(this.sellID));
+        this.displayItem.rotation=this.rotation;
+        this.scene.add(this.displayItem);
 
     }
     onPreUpdate(_engine, _delta) {
@@ -103,6 +108,11 @@ export class Markt extends Actor
                 this.selling = true
             }
         }
+    }
+    _prekill(_scene) {
+        super._prekill(_scene);
+        this.entrace.kill();
+        this.displayItem.kill();
     }
 
 }

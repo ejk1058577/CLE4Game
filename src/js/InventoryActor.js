@@ -42,12 +42,11 @@ export class InventoryActor extends MovingActor
     }
     dropItem(dropVel,dropHeight,destroyOnFall,canHit)
     {
-        let foodActor = new Food({id: this.inventory});
+        let foodActor = new Food({id: this.inventory,startHeight:dropHeight,minHeight:0});
         foodActor.isFalling=true;
         foodActor.pos=this.Display.pos;
         this.inventory = 0;
         this.DisplayItem();
-        foodActor.height=dropHeight;
         foodActor.fallDestroy = destroyOnFall;
         foodActor.canHit = canHit;
         if(dropVel)

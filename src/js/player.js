@@ -107,12 +107,15 @@ export class player extends InventoryActor {
 
     FoodCollision(e) {
         // console.log("trytopick")
-        if (this.isDiving && Math.abs(this.divingTimer) < 0.2 && this.inventory == 0) {
+        if (this.isDiving && Math.abs(this.divingTimer) < e.other.height+0.2 && this.inventory == 0) {
             console.log(e.other instanceof Food);
             if (e.other instanceof Food) {
+                this.divingTimer=e.other.height;
                 e.other.pickup(this);
                 this.DisplayItem();
+
             }
+
         }
     }
 }
