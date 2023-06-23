@@ -38,7 +38,6 @@ export class Game extends Engine {
         this.#joyStickListener = (e) => this.#joyStickFound(e);
         document.addEventListener("joystickcreated",  this.#joyStickListener); //this listener does not work.
         //setTimeout(this.#joyStickListener, 5000); used this for debugging.
-       // this.add(new Ground())
     }
 
     onPostUpdate(_engine, _delta) {

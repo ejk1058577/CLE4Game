@@ -25,6 +25,8 @@ export class Human extends InventoryActor
     allowMove;
 
     interval=0;
+    intervalTime=5;
+    turnSpeed = 5;
     static angleSpacing = Math.PI/12;
     constructor() {
         super();
@@ -65,6 +67,7 @@ export class Human extends InventoryActor
         this.rotSpeed = 5;
         this.useRotation=true;
         this.useTargetVel=true;
+        this.interval = this.rng.integer(0,this.intervalTime-1)
        // this.updateTarget();
         //this.on("exitviewport", event => this.kill());
     }
@@ -84,11 +87,12 @@ export class Human extends InventoryActor
         }
     }
     move() {
-        this.interval = (this.interval+1)%4
+
+        this.interval = (this.interval+1)%this.intervalTime;
         let effectiveSpeed = Math.max(0,this.speed);
         if(this.allowMove==true) {
             this.speed = this.lerp(this.speed, 80, this.delta)
-            let rayResult = this.TestRay(this, this.vel, 4, 400, Human.angleSpacing, -2*Human.angleSpacing)
+            let rayResult = this.TestRay(this, this.vel, 3, 400, Human.angleSpacing, -Human.angleSpacing)
 
             if (rayResult.rayID == -1 || this.interval > 0) {
                 // this.targetAngle=this.angle;
@@ -104,15 +108,15 @@ export class Human extends InventoryActor
                 }
             } else {
                 let rayID = rayResult.rayID;
-                //if (rayID = 1) {
-                  //  rayID = (Math.random() > 0.5) ? 0 : 2;
-               // }
+                if (rayID = 1) {
+                    rayID = (Math.random() > 0.5) ? 0 : 2;
+                }
             //    console.log(Vector.distance(this.pos,rayResult.hitPoint));
                 let turn = 0;
-                if (rayID <=1) {
-                    turn = this.delta * 7.5;
-                } else if (rayID >=2) {
-                    turn = -this.delta * 7.5;
+                if (rayID ==0) {
+                    turn = this.delta * this.turnSpeed;
+                } else if (rayID ==2) {
+                    turn = -this.delta * this.turnSpeed;
                 }
                 this.targetAngle += turn;
                 this.rotation = this.angle;
@@ -149,14 +153,14 @@ export class Human extends InventoryActor
     {
         if(event.other.body.collisionType!=CollisionType.Passive)
         {
-            this.collided=true;
+            this.turnSpeed=10;
         }
     }
     endCollision(event)
     {
         if(event.other.body.collisionType!=CollisionType.Passive)
         {
-            this.collided=false;
+            this.turnSpeed=5;
         }
     }
 
@@ -164,23 +168,34 @@ export class Human extends InventoryActor
     {
         let point=null;
         let result={rayID:-1,hitPoint:new Vector(Infinity,Infinity)};
-        for(const index in this.game.currentScene.Obstacles) {
+        for(const index in this.game.currentScene.Obstacles)
+        {
             let GameObj = this.game.currentScene.Obstacles[index]
-            if (Caller != GameObj) {
-                if (Vector.distance(GameObj.pos, Caller.pos) <= maxDistance) {
-                    let rayAngle = MovingActor.getAngleFromDir(Direction) + startOffset;
-                    for (let i = 0; i < Rays; i++) {
-                        let rayDir = MovingActor.getDirFromAngle(rayAngle + i * raySpacing);
-                        let ray = new Ray(Caller.pos, rayDir);
-                        point = GameObj.collider.get().rayCast(ray);
-                        if (point instanceof Vector && point.x != Infinity)
+            let dist = Vector.distance(GameObj.pos,Caller.pos)
+            if(this.inventory ==0 && GameObj.tags[1]=="Ignore" && dist<maxDistance+50)
+            {
+                this.walkTarget=GameObj;
+            }
+            if(dist<=maxDistance)
+            {
+
+                let rayAngle=MovingActor.getAngleFromDir(Direction)+startOffset;
+                for(let i =0;i<Rays;i++)
+                {
+                    let rayDir = MovingActor.getDirFromAngle(rayAngle+i*raySpacing);
+                    let ray = new Ray(Caller.pos,rayDir);
+                    point=GameObj.collider.get().rayCast(ray);
+                    if(point instanceof Vector && point.x != Infinity)
+                    {
+                        let dist = Vector.distance(Caller.pos,point);
+                        if(dist<Vector.distance(Caller.pos,result.hitPoint))
                         {
-                            let dist = Vector.distance(Caller.pos, point);
-                            if (dist < Vector.distance(Caller.pos, result.hitPoint) && dist < maxDistance)
+                            result.rayID = i;
+                            if(this.inventory ==0 && GameObj.tags[1]=="Ignore")
                             {
-                                result.rayID = i;
-                                result.hitPoint = point;
+                                result.rayID=-1;
                             }
+                            result.hitPoint = point;
                         }
                     }
                 }
