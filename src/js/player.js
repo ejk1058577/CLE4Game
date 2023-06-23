@@ -33,13 +33,14 @@ export class player extends InventoryActor {
 
     onInitialize(_engine) {
         super.onInitialize(_engine);
-        this.z = 5;
+        this.z = 10;
         this.acceleration = 50;
        // this.useTargetVel = true;
         this.displayAngle = 0;
         this.displayDistance = 25;
         this.Display.minScale = new Vector(0.4, .4);
         this.Display.maxScale = new Vector(0.75, 0.75);
+        this.Display.z=9
         this.DisplayItem()
         //save refernce to game engine
         this.game = _engine;

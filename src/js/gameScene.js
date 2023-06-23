@@ -62,6 +62,7 @@ export class gameScene extends Scene {
             if(this.entities[i] instanceof Human || this.entities[i] instanceof Food) {
                 this.entities[i].kill();
             }
+
             this.nest.timers[0]=1;
             this.nest.RequestNewItem(0);
             this.game.score=0;
@@ -69,6 +70,9 @@ export class gameScene extends Scene {
             this.ui.scoreText.text="0";
             this.pl.pos=new Vector(3*Ground.spacing,3*Ground.spacing)
             this.pl.inventory=0;
+            this.pl.divingTimer=-1;
+            this.pl.isDiving=false;
+            this.pl.DisplayItem();
         }
     }
     onPostUpdate(_engine, _delta) {
