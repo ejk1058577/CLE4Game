@@ -15,7 +15,7 @@ export class Nest extends Actor
     timers;
     score;
     rng
-    deliveryTime=30
+    deliveryTime=5
     constructor() {
         super();
         this.pos=new Vector(3*Ground.spacing,3*Ground.spacing)
@@ -42,8 +42,9 @@ export class Nest extends Actor
         super.onPreUpdate(_engine, _delta);
         this.timers[0]-=(_delta/1000)/this.deliveryTime;
         this.scene.ui.updTimebar(this.timers[0]);
-        if(this.deliveryTime <= 0) {
-            _engine.goToScene('gameoverScene')
+        if(this.timers[0] <= 0) {
+            //console.log('TIME IS LOWER THAN 0');
+            _engine.goToScene('gameoverScene');
         }
     }
 
