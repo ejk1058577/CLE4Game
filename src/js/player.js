@@ -5,6 +5,7 @@ import { Food } from "./food.js";
 import {FoodManager} from "./foodManager.js";
 import {PlayerInput} from "./playerInput.js";
 import {InventoryActor} from "./InventoryActor.js";
+
 export class player extends InventoryActor {
     //Refernce to engine
     game
@@ -27,7 +28,6 @@ export class player extends InventoryActor {
         this.divingTimer = -1;
         this.isDiving = false;
         this.speed = 250;
-        this.vel=new Vector(0,0);
     }
 
     onInitialize(_engine) {
@@ -64,6 +64,7 @@ export class player extends InventoryActor {
             this.Dive()
         }
     }
+
     PlayerInput() {
 
         this.angle += this.delta * PlayerInput.TurnSensitivity * PlayerInput.MoveInput.x;
@@ -114,6 +115,5 @@ export class player extends InventoryActor {
             }
         }
     }
-
 }
 
