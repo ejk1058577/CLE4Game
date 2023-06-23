@@ -17,11 +17,8 @@ export class Markt extends Actor
     sellingToHuman;
     selling
     entrace;
-<<<<<<< Updated upstream
-=======
     displayItem;
     height = 0.6;
->>>>>>> Stashed changes
     constructor(sellID,pos,rot)
     {
         super();

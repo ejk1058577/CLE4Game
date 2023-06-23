@@ -19,17 +19,7 @@ export class gameScene extends Scene {
     pl;
     nest;
     ui;
-<<<<<<< Updated upstream
     humanSpawner;
-
-    onInitialize(_engine) {
-        console.log('game scene initd')
-    }
-
-    onActivate(_engine) {
-        console.log("start")
-=======
-
     ground;
     query
     Obstacles;
@@ -39,7 +29,6 @@ export class gameScene extends Scene {
         this.game=_engine;
         this.ground=new Ground();
         this.add(this.ground);
->>>>>>> Stashed changes
         this.plInput = new PlayerInput();
         this.add(this.plInput);
 
@@ -68,9 +57,6 @@ export class gameScene extends Scene {
 
         this.add(new Arrow(this.pl,this.nest))
     }
-
-<<<<<<< Updated upstream
-=======
     onActivate(_engine) {
         console.log("start")
         for(let i=0;i<this.entities.length;i++)
@@ -86,8 +72,6 @@ export class gameScene extends Scene {
             this.pl.inventory=0;
         }
     }
-
->>>>>>> Stashed changes
     onPostUpdate(_engine, _delta) {
         super.onPostUpdate(_engine, _delta);
         this.playerPos = this.pl.pos;
