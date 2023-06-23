@@ -53,8 +53,6 @@ export class gameScene extends Scene {
 
         this.nest = new Nest();
         this.add(this.nest);
-        this.add(new Ground())
-
         this.add(new Arrow(this.pl,this.nest))
     }
     onActivate(_engine) {
@@ -67,7 +65,7 @@ export class gameScene extends Scene {
             this.nest.timers[0]=1;
             this.nest.RequestNewItem(0);
             this.nest.score=0;
-            this.ui.scoreText="0";
+            this.ui.scoreText.text="0";
             this.pl.pos=new Vector(3*Ground.spacing,3*Ground.spacing)
             this.pl.inventory=0;
         }
