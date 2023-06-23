@@ -36,7 +36,7 @@ export class gameScene extends Scene {
         this.add(this.ui);
 
         this.pl = new player();
-        this.pl.pos=new Vector(32*128,32*128)
+        this.pl.pos=new Vector(3*Ground.spacing,3*Ground.spacing)
         this.add(this.pl);
         this.playerPos=this.pl.pos;
 
