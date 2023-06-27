@@ -16,6 +16,13 @@ import markt from '../images/markt.png'
 import marktStripes from '../images/marktStripes.png'
 import titleImage from '../images/loadingscreen.png'
 
+import ambient from '../audio/ambient.mp3'
+import button from '../audio/button.mp3'
+import gameover from '../audio/gameover.mp3'
+import impact from '../audio/impact.mp3'
+import point from '../audio/point.mp3'
+import wingflap from '../audio/wingflap.mp3'
+
 const Resources = {
     Meeuw:new ImageSource(meeuwImage),
     Human1:new ImageSource(human1Image),
@@ -32,7 +39,13 @@ const Resources = {
     Food: new ImageSource(food),
     Markt:new ImageSource(markt),
     MarktStripes:new ImageSource(marktStripes),
-    Title: new ImageSource(titleImage)
+    Title: new ImageSource(titleImage),
+    Ambient: new Sound(ambient),
+    Button: new Sound(button),
+    Gameover: new Sound(gameover),
+    Impact: new Sound(impact),
+    Point: new Sound(point),
+    Wingflap: new Sound(wingflap)
 }
 
 const resourceArray = []
