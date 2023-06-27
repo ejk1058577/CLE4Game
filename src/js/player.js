@@ -1,4 +1,4 @@
-import {Actor, Vector, Input, clamp, CollisionType, Shape} from "excalibur";
+import {Actor, Vector, Input, clamp, CollisionType, Shape, SpriteSheet} from "excalibur";
 import {Resources} from "./resources.js";
 import {fallingObject} from "./fallingObject.js";
 import { Food } from "./food.js";
@@ -6,6 +6,7 @@ import {FoodManager} from "./foodManager.js";
 import {PlayerInput} from "./playerInput.js";
 import {InventoryActor} from "./InventoryActor.js";
 import {MovingActor} from "./MovingActor.js";
+
 export class player extends InventoryActor {
     //Refernce to engine
     game
@@ -15,6 +16,13 @@ export class player extends InventoryActor {
     divingTimer
     speed;
 
+    static spriteSheet = SpriteSheet.fromImageSource({
+        image:Resources.Meeuw,
+        grid:{rows: 1,
+            columns: 3,
+            spriteWidth: 64,
+            spriteHeight: 64},
+    });
 
     constructor() {
         super();
@@ -33,19 +41,23 @@ export class player extends InventoryActor {
     onInitialize(_engine) {
         super.onInitialize(_engine);
         this.z = 10;
-       // this.acceleration = 50;
-        //this.useTargetVel = true;
         this.displayAngle = 0;
         this.displayDistance = 25;
         this.Display.minScale = new Vector(0.4, .4);
         this.Display.maxScale = new Vector(0.75, 0.75);
-        this.Display.z = 9
+        this.Display.z=9;
         this.DisplayItem()
         //save refernce to game engine
         this.game = _engine;
         //assign sprite to actor. The sprite is flipped because it faced wrong direction, might not need in final version
-        let sprite = Resources.Meeuw.toSprite();
-        this.graphics.use(sprite);
+
+        this.useAnimation=true;
+        this.frameSpeed=0.15;
+        this.animationSprites=[
+            player.spriteSheet.getSprite(0,0),
+            player.spriteSheet.getSprite(1,0),
+            player.spriteSheet.getSprite(2,0),
+            player.spriteSheet.getSprite(1,0)]
         const box = Shape.Circle(64);
         this.collider.set(box);
         this.body.collisionType = CollisionType.Passive;
@@ -88,11 +100,10 @@ export class player extends InventoryActor {
         //rotate player
         this.transform.rotation = this.angle;
         //recalculate forward velocity of the player
-        let dir = MovingActor.getDirFromAngle(this.angle)
-        dir.x *=this.speed;
-        dir.y *=this.speed;
+        let dir = MovingActor.getDirFromAngle(this.angle);
+        dir.x*=this.speed;
+        dir.y*=this.speed;
         this.vel=dir;
-        //this.moveForward(this.speed);
         //this.displayItem.pos=new Vector(this.pos.x,this.pos.y);
     }
 
@@ -112,15 +123,12 @@ export class player extends InventoryActor {
 
     FoodCollision(e) {
         // console.log("trytopick")
-        if (this.isDiving && Math.abs(this.divingTimer) < e.other.height+0.2 && this.inventory == 0) {
+        if (this.isDiving && Math.abs(this.divingTimer) < 0.2 && this.inventory == 0) {
             console.log(e.other instanceof Food);
             if (e.other instanceof Food) {
-                this.divingTimer=e.other.height;
                 e.other.pickup(this);
                 this.DisplayItem();
-
             }
-
         }
     }
 }

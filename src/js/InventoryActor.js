@@ -24,7 +24,7 @@ export class InventoryActor extends MovingActor
 
         this.Display.pos = this.pos;
         this.Display.z=4;
-        this.Display.graphics.use(Resources.Fish.toSprite());
+       // this.Display.graphics.use(Resources.Fish.toSprite());
         this.scene.add(this.Display);
     }
     onPreUpdate(_engine, _delta) {
@@ -42,11 +42,12 @@ export class InventoryActor extends MovingActor
     }
     dropItem(dropVel,dropHeight,destroyOnFall,canHit)
     {
-        let foodActor = new Food({id: this.inventory,startHeight:dropHeight,minHeight:0});
+        let foodActor = new Food({id: this.inventory});
         foodActor.isFalling=true;
         foodActor.pos=this.Display.pos;
         this.inventory = 0;
         this.DisplayItem();
+        foodActor.height=dropHeight;
         foodActor.fallDestroy = destroyOnFall;
         foodActor.canHit = canHit;
         if(dropVel)

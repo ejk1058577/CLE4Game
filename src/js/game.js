@@ -6,11 +6,9 @@ import { Arcade } from "arcade-game"
 import { gameScene } from './gameScene.js'
 import { menuScene } from './menuScene.js';
 import { gameoverScene } from './gameoverScene.js';
-import { Highscore } from './highscore';
 
 export class Game extends Engine {
 
-    score
     playerPos;
 
     plInput;
@@ -22,36 +20,28 @@ export class Game extends Engine {
     #joyStickListener;
 
     username;
-    highscore;
 
     constructor(options) {
         super(options)
         this.start(ResourceLoader).then(() => this.startGame())
         this.username = 'Guest';
-        this.highscore = new Highscore();
     }
 
     startGame() {
         document.addEventListener("keydown", this.preventSpace)
-        this.add('gameScene', new gameScene())
+        this.add('gameScene', new gameScene())   
         this.add('menuScene', new menuScene(this))
-        this.add('gameoverScene', new gameoverScene(this))
+        this.add('gameoverScene', new gameoverScene())
 
         this.goToScene('menuScene')
 
         //#arcade controls
         console.log("loading #arcade controls");
-        this.#arcade = new Arcade(this, false, true);
+        this.#arcade = new Arcade(this, false, false);
         this.#joyStickListener = (e) => this.#joyStickFound(e);
         document.addEventListener("joystickcreated",  this.#joyStickListener); //this listener does not work.
         //setTimeout(this.#joyStickListener, 5000); used this for debugging.
         this.add(new Ground())
-        
-        //load highscores
-        this.highscore.loadScores()
-        .catch((rej) => {
-            console.log(`Wasn't able to load highscores.`);
-        });
     }
 
     onPostUpdate(_engine, _delta) {
@@ -61,9 +51,7 @@ export class Game extends Engine {
 
     preventSpace(e)
     {
-        if(e.keyCode==32) {
-            e.preventDefault();
-        }
+        e.preventDefault();
     }
     //sample function for debug
     #joyStickFound(e)
@@ -98,6 +86,7 @@ const game = new Game({
      * meant to be captured by HTML GUI
      */
     pointerScope: Input.PointerScope.Canvas,
-    width: window.innerWidth-5,
-    height: window.innerHeight-5
+    width: 800, 
+    height: 600
   })
+

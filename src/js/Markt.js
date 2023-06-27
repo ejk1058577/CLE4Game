@@ -1,4 +1,4 @@
-import {Actor, CollisionType, RotateTo, Shape, Vector} from "excalibur";
+import {Actor, CollisionType, RotateTo, Shape, Vector,Color} from "excalibur";
 import {Game} from "./game.js";
 import {Human} from "./human.js";
 import {Resources} from "./resources.js";
@@ -17,8 +17,9 @@ export class Markt extends Actor
     sellingToHuman;
     selling
     entrace;
+    stripes
     displayItem;
-    height = 0.6;
+    height = 0.5;
     constructor(sellID,pos,rot)
     {
         super();
@@ -47,7 +48,16 @@ export class Markt extends Actor
         //this.entrace.graphics.use(Resources.Fish.toSprite());
         this.scene.add(this.entrace);
         this.z=2;
-
+        this.stripes = new Actor();
+        this.stripes.pos=this.pos;
+        this.stripes.rotation=this.rotation;
+        this.stripes.scale=this.scale;
+        let stripeSprite = Resources.MarktStripes.toSprite();
+        let ColorsList = [Color.Orange,Color.Magenta,Color.Red,Color.Blue,Color.Yellow,Color.Green,Color.Azure,Color.Cyan,Color.Black,Color.Rose,Color.Chartreuse,Color.ExcaliburBlue,Color.Violet];
+        stripeSprite.tint = ColorsList[Math.min(ColorsList.length-1,Math.floor(Math.random()*ColorsList.length))];
+        this.stripes.graphics.use(stripeSprite);
+        this.stripes.z =3;
+        this.scene.add(this.stripes);
         this.displayItem = new Actor();
         this.displayItem.pos = this.pos
      //   console.log(displayItem.pos);
@@ -67,16 +77,8 @@ export class Markt extends Actor
 
     sellItem(delta)
     {
-        this.sellingToHuman.allowMove=false;
-        this.sellingToHuman.speed=0;
-        this.sellingToHuman.vel=new Vector(0,0);
-        this.sellingToHuman.useTargetVel=false;
         this.sellTimer-=delta;
-        let humanLookDir = new Vector(this.pos.x-this.sellingToHuman.pos.x,this.pos.y-this.sellingToHuman.pos.y).normalize()
-        this.sellingToHuman.useRotation=true;
-        this.sellingToHuman.targetAngle = MovingActor.getAngleFromDir(humanLookDir);
-        this.sellingToHuman.rotation=this.sellingToHuman.angle;
-        this.sellingToHuman.rotation
+
         if(this.sellTimer<0)
         {
             this.sellTimer=this.sellTime;
@@ -86,6 +88,7 @@ export class Markt extends Actor
             this.sellingToHuman.updateTarget();
             this.sellingToHuman.useTargetVel=true;
             this.sellingToHuman.allowMove=true;
+            this.sellingToHuman.useAnimation=true;
             this.sellingToHuman=null;
 
         }
@@ -94,14 +97,24 @@ export class Markt extends Actor
     {
         if(event.other instanceof Human)
         {
-            console.log("humanDetected")
             if(event.other.walkTarget == this.entrace && this.sellingToHuman==null)
             {
 
             }
             if(event.other.inventory==0) {
-                console.log("possibleBuyer")
-                this.sellingToHuman = event.other;
+                event.other.allowMove=false;
+                event.other.speed=0;
+                event.other.vel=new Vector(0,0);
+                event.other.useTargetVel=false;
+                let humanLookDir = new Vector(this.pos.x-event.other.pos.x,this.pos.y-event.other.pos.y).normalize()
+                event.other.useRotation=true;
+                event.other.targetAngle = MovingActor.getAngleFromDir(humanLookDir);
+                event.other.rotation=event.other.angle;
+                //event.other.rotation
+                event.other.useAnimation=false;
+                if(this.sellingToHuman == null) {
+                    this.sellingToHuman = event.other;
+                }
                 this.selling = true
             }
         }

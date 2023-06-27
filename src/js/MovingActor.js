@@ -6,7 +6,6 @@ export class MovingActor extends Actor
     maxScale
     minScale
     height
-    minHeight
     gravity;
 
     useTargetVel
@@ -18,8 +17,21 @@ export class MovingActor extends Actor
     angle;
     rotSpeed;
 
+    useAnimation
+    frameIndex;
+    frameSpeed;
+    currentFrameDuration
+    animationSprites;
+
+
     delta;
 
+    playAnimation;
+    animationSprites=[];
+    animIndex;
+    animTimer;
+
+    animSpeed;
     constructor() {
         super();
         this.useHeight=false;
@@ -27,7 +39,6 @@ export class MovingActor extends Actor
         this.minScale=new Vector(0,0);
         this.maxScale=new Vector(1,1);
         this.height = 1;
-        this.minHeight=0
 
         this.useTargetVel=false;
         this.targetVel=new Vector(0,0);
@@ -35,7 +46,14 @@ export class MovingActor extends Actor
         this.useRotation=false;
         this.targetAngle=0;
         this.rotSpeed=0;
+        this.currentFrameDuration=0;
+        this.useAnimation=false;
+        this.frameSpeed=0;
+        this.frameIndex=0;
 
+        this.animTimer=0;
+        this.animIndex=0;
+        this.playAnimation=false;
     }
 
     onPreUpdate(_engine, _delta) {
@@ -52,11 +70,21 @@ export class MovingActor extends Actor
         {
             this.rotateTowards();
         }
+        if(this.useAnimation)
+        {
+            this.currentFrameDuration-=this.delta;
+            if(this.currentFrameDuration<0)
+            {
+                this.currentFrameDuration=this.frameSpeed;
+                this.frameIndex = (this.frameIndex+1)%this.animationSprites.length;
+                this.graphics.use(this.animationSprites[this.frameIndex]);
+            }
+        }
     }
     scaleObject()
     {
         this.scale=new Vector(this.lerp(this.minScale.x,this.maxScale.x,this.height),this.lerp(this.minScale.x,this.maxScale.x,this.height));
-        this.height=Math.max(this.minHeight,this.height-this.gravity*this.delta);
+        this.height=Math.max(0,this.height-this.gravity*this.delta);
     }
     accelerateObject()
     {

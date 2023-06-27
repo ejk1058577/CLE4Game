@@ -65,7 +65,7 @@ export class menuScene extends Scene {
 
         wrapper.appendChild(inputName);
         wrapper.appendChild(btnStart);
-        wrapper.appendChild(btnSettings);
+        //wrapper.appendChild(btnSettings);
 
         this.menuUI.appendChild(wrapper);
       }

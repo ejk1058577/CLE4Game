@@ -1,7 +1,8 @@
 import { ImageSource, Sound, Resource, Loader } from 'excalibur'
-import fishImage from '../images/fish.png'
 import meeuwImage from '../images/meeuw.png'
-import humanImage from  '../images/human.png'
+import human1Image from  '../images/human1.png'
+import human2Image from  '../images/human2.png'
+import human3Image from  '../images/human3.png'
 import nestImage from '../images/nest.png'
 import groundImage from '../images/groundTile.png'
 import groundGrassImage from '../images/groundgrassyTile.png'
@@ -12,12 +13,14 @@ import empty from '../images/empty.png'
 import arrow from '../images/arrow.png'
 import food from '../images/Food.png'
 import markt from '../images/markt.png'
+import marktStripes from '../images/marktStripes.png'
 import titleImage from '../images/loadingscreen.png'
 
 const Resources = {
-    Fish: new ImageSource(fishImage),
     Meeuw:new ImageSource(meeuwImage),
-    Human:new ImageSource(humanImage),
+    Human1:new ImageSource(human1Image),
+    Human2:new ImageSource(human2Image),
+    Human3:new ImageSource(human3Image),
     Nest: new ImageSource(nestImage),
     Ground: new ImageSource(groundImage),
     GroundGrass: new ImageSource(groundGrassImage),
@@ -28,6 +31,7 @@ const Resources = {
     arrow: new ImageSource(arrow),
     Food: new ImageSource(food),
     Markt:new ImageSource(markt),
+    MarktStripes:new ImageSource(marktStripes),
     Title: new ImageSource(titleImage)
 }
 

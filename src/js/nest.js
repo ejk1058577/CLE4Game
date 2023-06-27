@@ -15,7 +15,7 @@ export class Nest extends Actor
     timers;
     score;
     rng
-    deliveryTime=30
+    deliveryTime=25
     constructor() {
         super();
         this.pos=new Vector(3*Ground.spacing,3*Ground.spacing)
@@ -36,15 +36,14 @@ export class Nest extends Actor
         this.graphics.use(Resources.Nest.toSprite())
         this.collider.set(Shape.Circle(50))
         this.on("collisionstart",event => this.CheckFoodItems(event))
-        this.z = 9;
+        this.z = 1;
     }
     onPreUpdate(_engine, _delta){
         super.onPreUpdate(_engine, _delta);
         this.timers[0]-=(_delta/1000)/this.deliveryTime;
         this.scene.ui.updTimebar(this.timers[0]);
-        if(this.timers[0] <= 0) {
-            //console.log('TIME IS LOWER THAN 0');
-            _engine.goToScene('gameoverScene');
+        if(this.deliveryTime <= 0) {
+            _engine.goToScene('gameoverScene')
         }
     }
 
@@ -67,12 +66,10 @@ export class Nest extends Actor
                 {
                     if(this.requestedItems[i]==event.other.inventory) {
                         this.timers[i]=1;
-
                         event.other.inventory = 0;
                         event.other.DisplayItem();
                         console.log("delivered food")
                         this.score++;
-                        this.game.score = this.score;
                         this.scene.ui.scoreText.text = this.score.toString();
                         this.RequestNewItem(i);
                         break;

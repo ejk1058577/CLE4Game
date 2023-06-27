@@ -1,4 +1,4 @@
-import {Actor, CollisionType, GraphicsGroup, Random, Shape, Vector} from "excalibur";
+import {Actor, CollisionType, GraphicsGroup, Random, Ray, Shape, SpriteSheet, Vector} from "excalibur";
 import {Resources} from "./resources.js";
 import {Food} from "./food.js";
 import {FoodManager} from "./foodManager.js";
@@ -29,6 +29,7 @@ export class Human extends InventoryActor
     unstuckTimer
     ustuckDuration=5;
     unstuck=false;
+
     static angleSpacing = Math.PI/12;
     constructor() {
         super();
@@ -38,22 +39,41 @@ export class Human extends InventoryActor
     }
     onInitialize(_engine) {
         super.onInitialize(_engine);
+        this.addTag("Obstacle");
         this.height=0.4;
         this.useTargetVel=true;
         this.acceleration=20;
         this.lastPos=new Vector(this.pos.x,this.pos.y);
         this.rng = new Random();
         this.inventory = this.rng.integer(FoodManager.minId,FoodManager.maxID)
+        let hColor = this.rng.integer(0,2);
+        let sprites=[Resources.Human1,Resources.Human2,Resources.Human3];
+        let anim =SpriteSheet.fromImageSource({
+            image:sprites[hColor],
+            grid:{rows: 1,
+                columns: 2,
+                spriteWidth: 64,
+                spriteHeight: 96},
+        });
+        console.log(hColor);
+        this.useAnimation=true;
+        this.frameSpeed=0.5;
+        this.animationSprites=[
+            anim.getSprite(0,0),
+            anim.getSprite(1,0),
+        ]
+
+
         this.lastInventory= this.inventory;
-        this.displayAngle=1;
-        this.displayDistance=50;
+        this.displayAngle=0.66;
+        this.displayDistance=35;
         this.Display.z=4;
         this.Display.minScale=new Vector(0.4,.4);
         this.Display.maxScale=new Vector(0.75,0.75);
         this.DisplayItem()
 
         this.game=_engine;
-        this.graphics.use(Resources.Human.toSprite());
+       // this.graphics.use(Resources.Human.toSprite());
 
         this.collider.set(Shape.Circle(60))
         this.body.collisionType = CollisionType.Active;
@@ -68,7 +88,7 @@ export class Human extends InventoryActor
         this.rotSpeed = 2.5;
         this.useRotation=true;
         this.useTargetVel=true;
-       // this.updateTarget();
+        // this.updateTarget();
     }
     onPreUpdate(_engine, _delta) {
         super.onPreUpdate(_engine, _delta);
@@ -118,10 +138,10 @@ export class Human extends InventoryActor
             }
             if(!this.collided && this.walkTarget!=null && !this.unstuck)
             {
-               let tarDir = new Vector(this.walkTarget.pos.x-this.pos.x,this.walkTarget.pos.y-this.pos.y).normalize();
+                let tarDir = new Vector(this.walkTarget.pos.x-this.pos.x,this.walkTarget.pos.y-this.pos.y).normalize();
 
-             //  console.log(tarDir,this.walkTarget.pos);
-               this.targetAngle=MovingActor.getAngleFromDir(tarDir);
+                //  console.log(tarDir,this.walkTarget.pos);
+                this.targetAngle=MovingActor.getAngleFromDir(tarDir);
             }
             this.transform.rotation = this.angle;
             this.moveForward(effectiveSpeed);
