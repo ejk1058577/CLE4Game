@@ -1,4 +1,5 @@
 import { Scene } from "excalibur";
+import { Resources } from "./resources";
 
 export class gameoverScene extends Scene {
     title = null;
@@ -51,12 +52,14 @@ export class gameoverScene extends Scene {
 
             //TODO reset gameScene? && score?
             this.game.goToScene('gameScene');
+            Resources.Button.play();
         });
 
         btnMenu.onclick = ((e) => {
             e.preventDefault();
 
             this.game.goToScene('menuScene');
+            Resources.Button.play();
         })
 
         //styling
@@ -105,6 +108,8 @@ export class gameoverScene extends Scene {
                 }
                 scoreList.appendChild(li);
             });
+
+            Resources.Gameover.play(0.5) //sfx
         }
 
         //add elemts to stuff

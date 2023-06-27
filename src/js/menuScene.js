@@ -1,4 +1,5 @@
 import { Scene } from "excalibur";
+import { Resources } from "./resources";
 
 export class menuScene extends Scene {
     title = null;
@@ -52,6 +53,9 @@ export class menuScene extends Scene {
           if (inputName.value.trim() != '') {
             this.game.username = inputName.value;
           }
+
+          //play sfx
+          Resources.Button.play();
         }
 
         btnSettings.onclick = (e) => {

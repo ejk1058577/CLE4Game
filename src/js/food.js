@@ -67,6 +67,7 @@ export class Food extends MovingActor{
 
     pickup(player) {
         player.getItem(this.foodId);
+        Resources.Impact.play();
         this.kill();
     }
     onPreKill(_scene) {
@@ -103,6 +104,8 @@ export class Food extends MovingActor{
             event.other.speed=-100;
             event.other.dropItem(true,0.4,false,false);
 
+            //play some sfx
+            Resources.Impact.play();
 
             let particle = new ParticleObject({
                 emitRate: 100,

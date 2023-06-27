@@ -1,4 +1,5 @@
 import {Actor, Input, Vector} from "excalibur";
+import { Resources } from "./resources";
 
 export class PlayerInput extends Actor
 {
@@ -87,6 +88,7 @@ export class PlayerInput extends Actor
             if (this.game.input.keyboard.isHeld(Input.Keys.Space) || this.joystick0button0)
             {
                 PlayerInput.ActieInput=true;
+                Resources.Wingflap.play(); //play sound effect
             }
             else
             {

@@ -11,6 +11,7 @@ import {Human} from "./human.js";
 import {Food} from "./food.js";
 import {Tree} from "./Tree.js";
 import {Markt} from "./Markt.js";
+import { Resources } from "./resources.js";
 
 export class gameScene extends Scene {
     title = null;
@@ -74,11 +75,17 @@ export class gameScene extends Scene {
             this.pl.isDiving=false;
             this.pl.DisplayItem();
         }
+        Resources.Ambient.play(0.2);
     }
     onPostUpdate(_engine, _delta) {
         super.onPostUpdate(_engine, _delta);
         this.playerPos = this.pl.pos;
         this.Obstacles = this.query.getEntities();
         //console.log(ObstacleFinder.Objects);
+    }
+
+    onDeactivate(_engine) {
+        //stop sfx
+        Resources.Ambient.stop();
     }
 }
