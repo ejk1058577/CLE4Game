@@ -20,6 +20,7 @@ export class Highscore {
         return new Promise(async (res, rej) => {
             let scores = await this.requestScores().catch((e) => {
                 rej(e);
+                return;
             });
             this.scores = scores;
 
@@ -37,14 +38,16 @@ export class Highscore {
             let response;
             response = await fetch(`${this.baseUrl}?key=${this.key}`).catch((e) => {
                 rej(e);
+                return;
             });
 
             if (response.ok) {
                 this.connected = true;
                 let json = await response.json();
                 res(json);
+                return;
             }
-            
+
             this.connected = false;
             rej(response);
         });
@@ -62,13 +65,13 @@ export class Highscore {
                 return;
             }
 
-        rej(response);
+            rej(response);
         });
     }
 
     //function from mozilla
     async postData(url = "", data = {}) {
-    // Default options are marked with *
+        // Default options are marked with *
         try {
             const response = await fetch(url, {
                 method: "POST", // *GET, POST, PUT, DELETE, etc.
@@ -80,10 +83,10 @@ export class Highscore {
                 body: JSON.stringify(data), // body data type must match "Content-Type" header
             });
 
-                return response; // parses JSON response into native JavaScript objects
+            return response; // parses JSON response into native JavaScript objects
         } catch (e) {
             return e;
         }
-        
+
     }
 }

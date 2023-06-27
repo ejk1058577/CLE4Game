@@ -1,5 +1,6 @@
 import { ImageSource, Sound, Resource, Loader } from 'excalibur'
-import meeuwImage from '../images/meeuw.png'
+
+import meeuw from '../images/meeuw.png'
 import human1Image from  '../images/human1.png'
 import human2Image from  '../images/human2.png'
 import human3Image from  '../images/human3.png'
@@ -17,7 +18,7 @@ import marktStripes from '../images/marktStripes.png'
 import titleImage from '../images/loadingscreen.png'
 
 const Resources = {
-    Meeuw:new ImageSource(meeuwImage),
+    Meeuw:new ImageSource(meeuw),
     Human1:new ImageSource(human1Image),
     Human2:new ImageSource(human2Image),
     Human3:new ImageSource(human3Image),

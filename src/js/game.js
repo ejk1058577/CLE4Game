@@ -6,9 +6,11 @@ import { Arcade } from "arcade-game"
 import { gameScene } from './gameScene.js'
 import { menuScene } from './menuScene.js';
 import { gameoverScene } from './gameoverScene.js';
+import { Highscore } from './highscore';
 
 export class Game extends Engine {
 
+    score
     playerPos;
 
     plInput;
@@ -20,18 +22,20 @@ export class Game extends Engine {
     #joyStickListener;
 
     username;
+    highscore;
 
     constructor(options) {
         super(options)
         this.start(ResourceLoader).then(() => this.startGame())
         this.username = 'Guest';
+        this.highscore = new Highscore();
     }
 
     startGame() {
         document.addEventListener("keydown", this.preventSpace)
-        this.add('gameScene', new gameScene())   
+        this.add('gameScene', new gameScene())
         this.add('menuScene', new menuScene(this))
-        this.add('gameoverScene', new gameoverScene())
+        this.add('gameoverScene', new gameoverScene(this))
 
         this.goToScene('menuScene')
 
@@ -42,6 +46,12 @@ export class Game extends Engine {
         document.addEventListener("joystickcreated",  this.#joyStickListener); //this listener does not work.
         //setTimeout(this.#joyStickListener, 5000); used this for debugging.
         this.add(new Ground())
+
+        //load highscores
+        this.highscore.loadScores()
+            .catch((rej) => {
+                console.log(`Wasn't able to load highscores.`);
+            });
     }
 
     onPostUpdate(_engine, _delta) {
@@ -51,13 +61,15 @@ export class Game extends Engine {
 
     preventSpace(e)
     {
-        e.preventDefault();
+        if(e.keyCode==32) {
+            e.preventDefault();
+        }
     }
     //sample function for debug
     #joyStickFound(e)
     {
-        let joystick = this.#arcade.Joysticks[0] //hardcoded zero here for debugging purposes. 
-        
+        let joystick = this.#arcade.Joysticks[0] //hardcoded zero here for debugging purposes.
+
         // debug, this shows you the names of the buttons when they are pressed
         for (const buttonEvent of joystick.ButtonEvents) {
             document.addEventListener(buttonEvent, () => console.log(buttonEvent))
@@ -69,7 +81,7 @@ export class Game extends Engine {
             joystick.update();
         }
     }
- 
+
     disconnect() {
         document.removeEventListener("joystickcreated", this.#joyStickListener)
     }
@@ -88,5 +100,4 @@ const game = new Game({
     pointerScope: Input.PointerScope.Canvas,
     width: window.innerWidth-5,
     height: window.innerHeight-5
-  })
-
+})

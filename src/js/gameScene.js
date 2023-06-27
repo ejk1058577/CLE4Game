@@ -1,4 +1,4 @@
-import { Scene, Vector} from "excalibur"
+import {Scene, TileMap, Vector} from "excalibur"
 import { player } from "./player.js";
 
 import { HumanSpawner } from "./humanSpawner.js";
@@ -7,6 +7,10 @@ import { Ground } from "./Ground.js";
 import { UI } from "./UI.js";
 import { Arrow } from "./Arrow.js";
 import { PlayerInput } from "./playerInput.js";
+import {Human} from "./human.js";
+import {Food} from "./food.js";
+import {Tree} from "./Tree.js";
+import {Markt} from "./Markt.js";
 
 export class gameScene extends Scene {
     title = null;
@@ -16,13 +20,15 @@ export class gameScene extends Scene {
     nest;
     ui;
     humanSpawner;
+    ground;
+    query
+    Obstacles;
 
     onInitialize(_engine) {
         console.log('game scene initd')
-    }
-
-    onActivate(_engine) {
-        console.log("start")
+        this.game=_engine;
+        this.ground=new Ground();
+        this.add(this.ground);
         this.plInput = new PlayerInput();
         this.add(this.plInput);
 
@@ -47,15 +53,32 @@ export class gameScene extends Scene {
 
         this.nest = new Nest();
         this.add(this.nest);
-        this.add(new Ground())
-
         this.add(new Arrow(this.pl,this.nest))
     }
+    onActivate(_engine) {
+        console.log("start")
+        for(let i=0;i<this.entities.length;i++)
+        {
+            if(this.entities[i] instanceof Human || this.entities[i] instanceof Food) {
+                this.entities[i].kill();
+            }
 
+            this.nest.timers[0]=1;
+            this.nest.RequestNewItem(0);
+            this.game.score=0;
+            this.nest.score=0;
+            this.ui.scoreText.text="0";
+            this.pl.pos=new Vector(3*Ground.spacing,3*Ground.spacing)
+            this.pl.inventory=0;
+            this.pl.divingTimer=-1;
+            this.pl.isDiving=false;
+            this.pl.DisplayItem();
+        }
+    }
     onPostUpdate(_engine, _delta) {
         super.onPostUpdate(_engine, _delta);
         this.playerPos = this.pl.pos;
         this.Obstacles = this.query.getEntities();
-       // console.log(ObstacleFinder.Objects);
+        //console.log(ObstacleFinder.Objects);
     }
 }
