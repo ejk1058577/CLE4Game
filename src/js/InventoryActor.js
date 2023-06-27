@@ -24,7 +24,7 @@ export class InventoryActor extends MovingActor
 
         this.Display.pos = this.pos;
         this.Display.z=4;
-       // this.Display.graphics.use(Resources.Fish.toSprite());
+        // this.Display.graphics.use(Resources.Fish.toSprite());
         this.scene.add(this.Display);
     }
     onPreUpdate(_engine, _delta) {

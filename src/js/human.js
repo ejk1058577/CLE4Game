@@ -55,7 +55,6 @@ export class Human extends InventoryActor
                 spriteWidth: 64,
                 spriteHeight: 96},
         });
-        console.log(hColor);
         this.useAnimation=true;
         this.frameSpeed=0.5;
         this.animationSprites=[
@@ -73,7 +72,6 @@ export class Human extends InventoryActor
         this.DisplayItem()
 
         this.game=_engine;
-       // this.graphics.use(Resources.Human.toSprite());
 
         this.collider.set(Shape.Circle(60))
         this.body.collisionType = CollisionType.Active;

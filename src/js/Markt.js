@@ -1,3 +1,4 @@
+
 import {Actor, CollisionType, RotateTo, Shape, Vector,Color} from "excalibur";
 import {Game} from "./game.js";
 import {Human} from "./human.js";
@@ -124,5 +125,4 @@ export class Markt extends Actor
         this.entrace.kill();
         this.displayItem.kill();
     }
-
 }

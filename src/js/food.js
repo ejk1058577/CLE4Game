@@ -98,10 +98,10 @@ export class Food extends MovingActor{
     {
         if(event.other instanceof Human)
         {
-                this.kill();
-                console.log("humanAttacked")
-                event.other.speed=-100;
-                event.other.dropItem(true,0.4,false,false);
+            this.kill();
+            console.log("humanAttacked")
+            event.other.speed=-100;
+            event.other.dropItem(true,0.4,false,false);
 
 
             let particle = new ParticleObject({
