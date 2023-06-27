@@ -19,7 +19,7 @@ import titleImage from '../images/loadingscreen.png'
 import ambient from '../audio/ambient.mp3'
 import button from '../audio/button.mp3'
 import gameover from '../audio/gameover.mp3'
-import impact from '../audio/impact.mp3'
+import impact from '../audio/impact.ogg'
 import point from '../audio/point.mp3'
 import wingflap from '../audio/wingflap.mp3'
 
