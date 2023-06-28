@@ -3,3 +3,97 @@ body {
     padding:0;
     background-color:darkgray;
 }
+
+
+#root {
+    /* When this is relative, child elements positioned absolutely will
+       be relative to this element, not the document providing more accurate
+       positioning, since the canvas will be at (0, 0) */
+    position: relative;
+}
+
+#root #ui {
+    /* This will make the UI appear on top of the canvas */
+    /* TODO: Remember to change resolution to adjust for game */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1024px;
+    height: 700px;
+    font-family: VT323;
+}
+#root #ui input {
+    font-family: VT323;
+}
+
+#root #ui button {
+    font-family: VT323;
+}
+
+#ui .button {
+    background-color: darkgray;
+    color: white;
+    width: 8em;
+    font-size: 1.5em;
+    border-radius: 4px;
+}
+
+#ui .wrapper {
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    align-items: center;
+}
+
+#ui .wrapper-hz {
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#ui .container {
+    width: 50%;
+    background-color: darkgrey;
+    color: white;
+    padding: 0.5em;
+    margin: 0.5em;
+    border-style: outset;
+    border-color: buttonborder;
+    border-image: initial;
+    border-radius: 4px;
+}
+
+/* These are scene-based UI styles */
+
+#ui.mainmenu .input {
+    background-color: darkgray;
+    color: white;
+    width: 7.7em;
+    font-size: 1.5em;
+    border-radius: 4px;
+}
+
+.gameover
+{
+    margin-top: 100px;
+}
+
+#ui.gameover .container {
+    font-size: 1.2em;
+}
+
+#ui.gameover ol {
+    max-height: 12em;
+    overflow-y: scroll;
+}
+
+#ui.gameover h1 {
+    font-size: 1.5em;
+    text-align: center;
+}
+
+#ui.mainmenu .wrapper img {
+    margin: 5em 0;
+}

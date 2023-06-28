@@ -2,6 +2,7 @@ import {Actor, Random, Vector} from "excalibur";
 
 export class Spawner extends Actor
 {
+    scene;
     game;
     targetAmount;
     currentAmount;
@@ -12,6 +13,8 @@ export class Spawner extends Actor
 
     spawnArea
     spawnOffset
+
+    lastSpawn
     constructor(targetAmount,SpawnObject,SpawnParam,spawnArea,spawnOffset) {
         super();
         this.targetAmount=targetAmount;
@@ -25,6 +28,7 @@ export class Spawner extends Actor
         super.onInitialize(_engine);
         console.log("spawner active")
         this.game=_engine;
+        this.scene=this.game.currentScene;
         this.rng =new Random()
     }
 
@@ -44,8 +48,9 @@ export class Spawner extends Actor
         spawn.spawner = this;
         this.scene.add(spawn);
         this.currentAmount++;
+        this.lastSpawn=spawn;
         if(this.afterBehaviour != null) {
-            this.afterBehaviour(spawn)
+            this.afterBehaviour()
         }
     }
 }
